@@ -1,7 +1,11 @@
 package com.example.capston_park_application;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -11,6 +15,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // 다른 클래스 함수 호출을 여기에 적으면 버튼들 정상 작동
+        DataManager.Init(false, true);
+
+        Button Btn_Parkinglot_Detail = (Button) findViewById(R.id.btn_parkinglot_detail_open);
+        Btn_Parkinglot_Detail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "" + DataManager.isInit(), Toast.LENGTH_SHORT).show();
+                Intent it = new Intent(getApplicationContext(), MainScreen.class);
+                startActivity(it);
+                finish();
+            }
+        });
+
     }
+
 }

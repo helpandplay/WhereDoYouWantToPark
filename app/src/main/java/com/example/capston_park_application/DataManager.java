@@ -12,17 +12,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.EventObject;
 
-class DataManager extends EventObject {
-
-
-    static {
-
-
-
-
-
-    }
-
+class DataManager {
 
     // 주차장 리스트
     public static ArrayList<ParkingLot> List_ParkingLot;
@@ -33,16 +23,13 @@ class DataManager extends EventObject {
     // 초기화 되었는지를 나타내는 boolean 형 플래그
     private static boolean isInit = false;
 
-    public DataManager(Object source) {
-        super(source);
-    }
-
     public static boolean isInit(){
         return isInit;
     }
 
-    // TODO : 초기화 코드를 만들어야 합니다.
     public static void Init(boolean useFireBaseDB, boolean doPrintDebug) {
+
+        isInit = false;
 
         // 리스트 초기화
         List_ParkingLot = new ArrayList<ParkingLot>();
@@ -88,11 +75,9 @@ class DataManager extends EventObject {
         }
 
 
-        // 로컬 DB로부터 즐겨찾기 데이터를 불러옵니다.
+        // TODO : 로컬 DB로부터 즐겨찾기 데이터를 불러옵니다.
         // 불러온 데이터를 리스트에 저장합니다.
-        for(int i = 0; i < 1; i++) {
-            // List_Favorite.add(loadded_favorite_data);
-        }
+        // for(int i = 0; i < 1; i++)  // List_Favorite.add(loadded_favorite_data);
 
         // 초기화가 한 번이라도 진행되었다는 것을 나타내기 위해 플레그를 세웁니다.
         isInit = true;
@@ -161,7 +146,7 @@ class DataManager extends EventObject {
 class FireBase {
 
     protected static ArrayList<ParkingLot> getData() {
-        ArrayList<ParkingLot> Result = new ArrayList<ParkingLot>();
+        final ArrayList<ParkingLot> Result = new ArrayList<ParkingLot>();
         DatabaseReference fBaseDB = FirebaseDatabase.getInstance().getReference();
 
 
@@ -231,14 +216,11 @@ class Favorite {
 // 주차장 데이터 객체
 class ParkingLot {
 
-    // TODO : 스스로 문제가 있는 데이터가 있는지 확인하는 메소드를 만들어야 합니다.
     public boolean hasMissingData() {
-        // 위도 경도 중 하나라도 공백이면 true 반환
-        if(this.getLatitude().equals("") || this.getLongittude().equals("")) return true;
-
         // 기타 추가할 필터가 있으면 if문을 추가하고 걸러지게 하고 싶다면 true를 반환하면 됩니다.
 
-        return false;
+        // 위도 경도 중 하나라도 공백이면 true 반환
+        return this.getLatitude().equals("") || this.getLongittude().equals("");
     }
 
     // Q : 어째서 ~~ 자료형은 ~~ 이 적절한데 String 인가요?
