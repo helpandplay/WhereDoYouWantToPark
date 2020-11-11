@@ -12,7 +12,7 @@ import android.widget.ImageButton;
 import java.util.Arrays; // 검색내용 저장하기 위한 어레이 배열
 import java.util.ArrayList; // 위와 같음
 
-public class MainScreen extends AppCompatActivity {
+public class MapActivity extends AppCompatActivity {
     public static Context context_MainScreen;
     public ArrayList<String> address = new ArrayList<String>(Arrays.asList("ABC", "DEF", "GHI", "JKL", "ABO", "APM"));
     // 검색기능 테스트를 빨리 하기위한 기본값 임시 배열. 추후 삭제 또는 값을 비워두고 파이어베이스의 값을 가져와서 저장하는 용도로 사용해도 됌

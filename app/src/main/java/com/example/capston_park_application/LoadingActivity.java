@@ -1,6 +1,7 @@
 package com.example.capston_park_application;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -52,6 +53,23 @@ public class LoadingActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void checkInit(){
+        try {
+            Log.d("", "대기중 . . .");
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if(DataManager.isInit()){
+
+
+
+        }
+        else{
+            checkInit();
+        }
     }
 
 }
