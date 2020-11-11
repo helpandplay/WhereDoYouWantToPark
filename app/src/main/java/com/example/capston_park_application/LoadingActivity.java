@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class LoadingActivity extends AppCompatActivity {
 
     // 파이어베이스를 사용하지 않고 하드코딩 데이터를 사용한다면 false로 변경
-    private static final boolean useFireBaseDB = true;
+    private static final boolean useFireBaseDB = false;
     private static final boolean doPrintDebug = true;
 
     @Override
@@ -43,12 +43,10 @@ public class LoadingActivity extends AppCompatActivity {
                 + "isinit : " + DataManager.isInit();
         PrintingLog.setText(message);
 
-        // Map Activity 오류로 실행 불가능
-        //      Caused by: java.lang.NullPointerException: Attempt to invoke virtual method 'void androidx.drawerlayout.widget.DrawerLayout.setDrawerLockMode(int)' on a null object reference
-        //        at com.example.capston_park_application.MapActivity.onCreate(MapActivity.java:39)
-        // Intent it = new Intent(getApplicationContext(), MapActivity.class);
-        // startActivity(it);
-        // finish();
+        // 로딩이 완료되면 Map Activity로 이동
+        Intent it = new Intent(getApplicationContext(), MapActivity.class);
+        startActivity(it);
+        finish();
 
     }
 }

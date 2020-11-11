@@ -23,7 +23,7 @@ public class MapActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) { //savedInstanceState = 세로, 가로 화면변경시 전역변수 초기화를 방지
         context_MainScreen = this;
         super.onCreate(savedInstanceState); // protected에선 onCreate를 super로 불러와야함
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_map);
         // 레이아웃의 search_view 즉, 검색창의 값을 가져옴
         // 검색 기능 테스트를 위해 일단 Textview 값을 가져옴 추후 삭제
         // 50번재줄의 값을 받아옴
