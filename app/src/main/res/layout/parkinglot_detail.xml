@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parkinglot_drawer"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginHorizontal="35dp"
+    android:layout_marginTop="480dp"
+    android:layout_marginBottom="20dp"
+    android:layout_gravity="bottom"
+    android:background="#8ACBF6">
+
+    <TextView
+        android:id="@+id/parkinglot_name"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="6"
+        android:text="Parkinglot_name"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/parkinglot_address_old"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="7"
+        android:text="parkinglot_address_old"
+        android:textSize="18sp" />
+
+
+    <TextView
+        android:id="@+id/parkinglot_address_new"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="7"
+        android:text="parkinglot_address_new"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/parkinglot_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="7"
+        android:text="parkinglot_distance"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/parkinglot_time"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="7"
+        android:text="parkinglot_time"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btn_parkinglot_detail_close"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginBottom="5dp"
+        android:text="close"/>
+
+</LinearLayout>
