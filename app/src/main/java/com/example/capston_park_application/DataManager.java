@@ -1,6 +1,7 @@
 package com.example.capston_park_application;
 
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
@@ -10,9 +11,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.EventObject;
 
-class DataManager {
+class DataManager extends AsyncTask<String, Boolean, String> {
+
+    private boolean useFireBaseDB;
+    private boolean doPrintDebug;
+    private LoadingActivity la;
+
+    public DataManager(boolean useFireBaseDB, boolean doPrintDebug, LoadingActivity la){
+        this.useFireBaseDB = useFireBaseDB;
+        this.doPrintDebug = doPrintDebug;
+        this.la = la;
+    }
 
     // 주차장 리스트
     public static ArrayList<ParkingLot> List_ParkingLot;
@@ -141,11 +151,44 @@ class DataManager {
         return (rad * 180 / Math.PI);
     }
 
+
+    // 비동기 작업을 위한 AsyncTask<String, Boolean, String> 코드들
+    // onPreExecute : 비동기 선행 준비 메소드
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        DataManager.Init(this.useFireBaseDB, this.doPrintDebug);
+    }
+
+    // doInBackground : 시작되면 백그라운드에서 실행될 메소드
+    @Override
+    protected String doInBackground(String... urls) {
+        while(true){
+            try {
+                Log.d("","대기중 . . . ");
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if(DataManager.List_ParkingLot.size() > 0){
+                break;
+            }
+        }
+        return "";
+    }
+
+    @Override
+    protected void onPostExecute(String res) {
+        la.InitChecker();
+    }
 }
+
+
+
 
 class FireBase {
 
-    protected static ArrayList<ParkingLot> getData() {
+    public static ArrayList<ParkingLot> getData() {
         final ArrayList<ParkingLot> Result = new ArrayList<ParkingLot>();
         DatabaseReference fBaseDB = FirebaseDatabase.getInstance().getReference();
 

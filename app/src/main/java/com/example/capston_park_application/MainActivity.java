@@ -3,9 +3,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -15,18 +12,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DataManager.Init(false, true);
-
-        Button Btn_Parkinglot_Detail = (Button) findViewById(R.id.btn_parkinglot_detail_open);
-        Btn_Parkinglot_Detail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "" + DataManager.isInit(), Toast.LENGTH_SHORT).show();
-                Intent it = new Intent(getApplicationContext(), MapActivity.class);
-                startActivity(it);
-                finish();
-            }
-        });
+        Intent it = new Intent(getApplicationContext(), LoadingActivity.class);
+        startActivity(it);
+        finish();
 
     }
 
