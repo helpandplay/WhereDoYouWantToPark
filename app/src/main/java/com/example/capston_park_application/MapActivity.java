@@ -1,4 +1,4 @@
-package com.example.capston_park_application; // 본인 프로젝트이름에 맞게 변경
+package com.example.capston_park_application;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -12,12 +12,23 @@ import android.widget.ImageButton;
 import java.util.Arrays; // 검색내용 저장하기 위한 어레이 배열
 import java.util.ArrayList; // 위와 같음
 
-public class MapActivity extends AppCompatActivity {
+// 구글 지도 import
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
     public static Context context_MainScreen;
     public ArrayList<String> address = new ArrayList<String>(Arrays.asList("ABC", "DEF", "GHI", "JKL", "ABO", "APM"));
     // 검색기능 테스트를 빨리 하기위한 기본값 임시 배열. 추후 삭제 또는 값을 비워두고 파이어베이스의 값을 가져와서 저장하는 용도로 사용해도 됌
     DrawerLayout option_drawerLayout, favorite_drawerLayout, parkinglot_drawerLayout;
     View option_drawerView, favorite_drawerView, parkinglot_drawerView;
+
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { //savedInstanceState = 세로, 가로 화면변경시 전역변수 초기화를 방지
@@ -105,5 +116,21 @@ public class MapActivity extends AppCompatActivity {
             }
         });
         ///////////////////////////////////////////////////////////////////////////////////////////
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng test = new LatLng(37, 127);
+        mMap.addMarker(new MarkerOptions()
+                .position(test)
+                .title("Testest"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(test));
     }
 }
