@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Capston_park_Application</string>
+    <string name="google_map_api_key">AIzaSyCGtlTC5O73XE0vXeDGLjzNjBX-_SThVkc</string>
 </resources>
