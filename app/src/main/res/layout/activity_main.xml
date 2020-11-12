@@ -7,6 +7,116 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <!--검색창-->
+    <SearchView
+        android:id="@+id/searchBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="60dp"
+        android:queryBackground="@android:color/transparent"
+        android:background="#77939393"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></SearchView>
 
+    <!--검색기능 작동 테스트용-->
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:text="Serach_test"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchBar" />
+
+    <!--주차장 상세 정보 테스트용-->
+    <Button
+        android:id="@+id/btn_parkinglot_detail_open"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="124dp"
+        android:text="parkinglot_detail"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499" />
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/parkinglot_drawer_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:context=".MainActivity">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </LinearLayout>
+        <include layout="@layout/parkinglot_detail"/>
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+    <!--즐겨찾기 버튼-->
+    <ImageButton
+        android:id="@+id/btn_favorite_open"
+        android:layout_width="45dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/searchBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/btn_star_big_on" />
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/favorite_drawer_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:context=".MainActivity">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </LinearLayout>
+        <include layout="@layout/favorite_drawer"/>
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+    <!--옵션 버튼-->
+    <ImageButton
+        android:id="@+id/btn_option_open"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/searchBar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_dialog_dialer" />
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/option_drawer_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:context=".MainActivity">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </LinearLayout>
+        <include layout="@layout/option_drawer"/>
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_favorite_open"
+        app:srcCompat="@android:drawable/ic_menu_mylocation" />
+
+    <!--<include layout="@layout/navigation_test"/> 네비게이션 테스트-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
