@@ -1,6 +1,9 @@
 package com.example.capston_park_application;
 
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -230,13 +233,37 @@ class FireBase {
         return Result;
     }
 
-
-
-
-
-
 }
 
+// 즐겨찾기 저장, 불러오기를 지원하는 SQLite 클래스
+class SQLite extends SQLiteOpenHelper {
+
+    private static final String DATABASE_NAME = "Favorite.db";
+    private static final int DATABASE_VERSION = 1;
+
+    private static final String TABLE_NAME = "Favorite";
+    private static final String COLUMN_INDEX = "index";
+    private static final String COLUMN_PARKINGLOT_ID = "parkinglotID";
+
+    private static final String SQL_CREATE_ENTRIES =
+            "CREATE TABLE " + TABLE_NAME + " (" +
+                    COLUMN_INDEX  + " INTEGER PRIMARY KEY AL," +
+                    COLUMN_PARKINGLOT_ID + " TEXT NOT NULL)";
+
+    public SQLite(Context c){
+        super(c, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(SQL_CREATE_ENTRIES);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
+}
 
 
 
@@ -244,13 +271,41 @@ class FireBase {
 class Favorite {
 
     private String ID_ParkingLot;
+    private String Name_ParkingLot;
+    private String Address_new;
+    private String Address_old;
+    private String Capacity;
 
-    public Favorite(String ID_ParkingLot) {
-        this.ID_ParkingLot = ID_ParkingLot;
+    public Favorite(String id, String name, String addr_new, String addr_old, String cap) {
+        this.ID_ParkingLot = id;
+        this.Name_ParkingLot = name;
+        this.Address_new = addr_new;
+        this.Address_old = addr_old;
+        this.Capacity = cap;
+    }
+
+    public Favorite(ParkingLot plot) {
+        this.ID_ParkingLot = plot.getID_ParkingLot();
+        this.Name_ParkingLot = plot.getName_ParkingLot();
+        this.Address_new = plot.getAddress_new();
+        this.Address_old = plot.getAddress_old();
+        this.Capacity = plot.getCapacity();
     }
 
     public String getID_ParkingLot() {
-        return this.ID_ParkingLot;
+        return ID_ParkingLot;
+    }
+    public String getName_ParkingLot() {
+        return Name_ParkingLot;
+    }
+    public String getAddress_new() {
+        return Address_new;
+    }
+    public String getAddress_old() {
+        return Address_old;
+    }
+    public String getCapacity() {
+        return Capacity;
     }
 
 }
