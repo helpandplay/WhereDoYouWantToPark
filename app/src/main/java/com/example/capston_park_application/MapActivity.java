@@ -54,7 +54,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         parkinglot_drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
         parkinglot_drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         //////////////////////////////////////////////////////////////////////
-
         ///////////////////각각 open, close 버튼 변수 저장///////////////////
         final ImageButton btn_open = (ImageButton)findViewById(R.id.btn_option_open);
         final Button btn_close = (Button)findViewById(R.id.btn_option_close);
@@ -71,6 +70,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 btn_open.setVisibility(View.INVISIBLE);
                 option_drawerLayout.setVisibility(View.VISIBLE);
                 option_drawerLayout.openDrawer(option_drawerView);
+                btn_parkinglot_open.setVisibility(View.INVISIBLE);
+                option_drawerLayout.bringToFront();
             }
         });
         btn_close.setOnClickListener(new View.OnClickListener() {
@@ -78,6 +79,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void onClick(View v) {   //옵션 버튼 close 클릭시
                 btn_open.setVisibility(View.VISIBLE);
                 option_drawerLayout.setVisibility(View.GONE);
+                btn_parkinglot_open.setVisibility(View.VISIBLE);
                 option_drawerLayout.closeDrawers();
             }
         });
@@ -88,6 +90,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 favorite_open.setVisibility(View.INVISIBLE);
                 favorite_drawerLayout.setVisibility(View.VISIBLE);
                 favorite_drawerLayout.openDrawer(favorite_drawerView);
+                btn_parkinglot_open.setVisibility(View.INVISIBLE);
+                favorite_drawerLayout.bringToFront();
             }
         });
 
@@ -96,21 +100,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void onClick(View v) {   //겨찾기 버튼 close 클릭시
                 favorite_open.setVisibility(View.VISIBLE);
                 favorite_drawerLayout.setVisibility(View.GONE);
+                btn_parkinglot_open.setVisibility(View.VISIBLE);
                 favorite_drawerLayout.closeDrawers();
             }
         });
-        favorite_open.setOnClickListener(new View.OnClickListener() {
+        btn_parkinglot_open.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {   //주차장 디테일 버튼 open 클릭시
                 btn_parkinglot_open.setVisibility(View.INVISIBLE);
                 parkinglot_drawerLayout.setVisibility(View.VISIBLE);
-                parkinglot_drawerLayout.openDrawer(favorite_drawerView);
+                parkinglot_drawerLayout.openDrawer(parkinglot_drawerView);
+                parkinglot_drawerLayout.bringToFront();
             }
         });
-        favorite_close.setOnClickListener(new View.OnClickListener() {
+        parkinglot_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {   //주차장 디테일 버튼 close 클릭시
-                favorite_open.setVisibility(View.VISIBLE);
+                btn_parkinglot_open.setVisibility(View.VISIBLE);
                 parkinglot_drawerLayout.setVisibility(View.GONE);
                 parkinglot_drawerLayout.closeDrawers();
             }
