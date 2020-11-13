@@ -10,13 +10,13 @@ public class FavoriteDBSQL{
 
     public static String CREATE_TBL = "CREATE TABLE IF NOT EXISTS " + TBL_NAME + " " +
             "(" +
-            COL_NO + "INTEGER PRIMARY KEY AUTOINCREMENT" + "," +
-            COL_PARKINGLOT_ID + "TEXT NOT NULL" + "," +
-            COL_PARKINGLOT_NAME + "TEXT NOT NULL" +
+            COL_NO + " INTEGER PRIMARY KEY AUTOINCREMENT" + "," +
+            COL_PARKINGLOT_ID + " TEXT NOT NULL" + "," +
+            COL_PARKINGLOT_NAME + " TEXT NOT NULL" +
             ")" ;
     public static String DATA_READ = "SELECT * FROM " + TBL_NAME;
-    public static String DATA_INSERT = "INSERT INTO " + TBL_NAME + " " +
-            "(" + COL_PARKINGLOT_ID + "," + COL_PARKINGLOT_NAME +") VALUES ";
+    //public static String DATA_INSERT = "INSERT INTO " + TBL_NAME + " " +
+    //        "(" + COL_PARKINGLOT_ID + "," + COL_PARKINGLOT_NAME +") VALUES ";
     public static String DATA_DELETE(String paringID){
         return "DELETE FROM " + TBL_NAME + "WHERE " + COL_PARKINGLOT_ID + "=" +paringID;
     }

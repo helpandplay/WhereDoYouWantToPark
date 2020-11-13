@@ -9,8 +9,8 @@ public class ScopeDBSQL{
 
     public static String CREATE_TBL = "CREATE TABLE IF NOT EXISTS " + TBL_NAME + " " +
             "(" +
-            COL_NO + "INTEGER PRIMARY KEY AUTOINCREMENT" + "," +
-            COL_distance + "INTEGER NOT NULL" +
+            COL_NO + " INTEGER PRIMARY KEY AUTOINCREMENT" + "," +
+            COL_distance + " TEXT NOT NULL" +
             ")" ;
     public static String DATA_READ = "SELECT * FROM " + TBL_NAME;
     public static String DATA_INSERT = "INSERT INTO " + TBL_NAME + " " +

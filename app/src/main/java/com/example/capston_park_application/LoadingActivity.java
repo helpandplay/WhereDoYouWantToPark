@@ -20,11 +20,13 @@ public class LoadingActivity extends AppCompatActivity {
 
         // 데이터 메니저 객체의 초기화를 시작합니다.
         // 초기화는 파이어베이스의 데이터와, 로컬에 저장된 즐겨찾기 목록을 불러오는 단계입니다.
+        DataManager.setContext(this);
         DataManager.Init(useFireBaseDB, doPrintDebug);
 
 
+
         // 비동기 작업을 위해 AsyncTesk 를 상속한 DataManager 객체 생성 후 실행
-        DataManager dm = new DataManager(useFireBaseDB, doPrintDebug, this);
+        DataManager dm = new DataManager(useFireBaseDB, doPrintDebug);
         dm.execute("");
     }
 
