@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,14 +21,15 @@ import java.util.ArrayList;
 
 class DataManager extends AsyncTask<String, Boolean, String> {
 
+    private static ParkingLotDBHelper parkingLotDBHelper;
     private boolean useFireBaseDB;
     private boolean doPrintDebug;
     private LoadingActivity la;
 
-    public DataManager(boolean useFireBaseDB, boolean doPrintDebug, LoadingActivity la){
+
+    public DataManager(boolean useFireBaseDB, boolean doPrintDebug){
         this.useFireBaseDB = useFireBaseDB;
         this.doPrintDebug = doPrintDebug;
-        this.la = la;
     }
 
     // 주차장 리스트
@@ -35,6 +38,45 @@ class DataManager extends AsyncTask<String, Boolean, String> {
     // 즐겨찾기 리스트
     public static ArrayList<Favorite> List_Favorite;
 
+    //즐겨찾기 리스트를 불러오기
+    //Context : 현재 화면의 context
+    public static ArrayList<FavoriteDB> getFavoriteList(Context context){
+        ArrayList<FavoriteDB> list = new ArrayList<FavoriteDB>();
+        Cursor cursor;
+        parkingLotDBHelper = new ParkingLotDBHelper(context, "Favorite");
+        SQLiteDatabase db =  parkingLotDBHelper.getReadableDatabase();
+        cursor = db.rawQuery(FavoriteDBSQL.DATA_READ, null);
+
+        while(cursor.moveToNext()){
+            FavoriteDB favoriteDB = new FavoriteDB();
+            favoriteDB.parkingID=cursor.getColumnName(1);
+            favoriteDB.parkingName=cursor.getColumnName(2);
+            list.add(favoriteDB);
+        }
+        return list;
+    }
+    //지도 거리 설정값 불러오기
+    public static String getSearchScope(Context context){
+        String result;
+        Cursor cursor;
+        parkingLotDBHelper = new ParkingLotDBHelper(context, "Scope");
+        SQLiteDatabase db =  parkingLotDBHelper.getReadableDatabase();
+        cursor = db.rawQuery(ScopeDBSQL.DATA_READ, null);
+
+        if(cursor.moveToFirst()){
+            cursor.moveToFirst();
+            result = cursor.getColumnName(1);
+            Log.i("", "거리 설정 가져오기 완료");
+            return result;
+        }else{
+            Log.w("","거리 설정 가져오기 실패");
+            return "로드실패";
+        }
+
+    }
+
+
+
     // 초기화 되었는지를 나타내는 boolean 형 플래그
     private static boolean isInit = false;
 
@@ -42,13 +84,14 @@ class DataManager extends AsyncTask<String, Boolean, String> {
         return isInit;
     }
 
-    public static void Init(boolean useFireBaseDB, boolean doPrintDebug) {
+    public static void Init(boolean useFireBaseDB, boolean doPrintDebug, Context context) {
 
         isInit = false;
 
         // 리스트 초기화
         List_ParkingLot = new ArrayList<ParkingLot>();
         List_Favorite = new ArrayList<Favorite>();
+
 
         // 파이어베이스에서 주차장 데이터를 가져옵니다.
         if(useFireBaseDB){
@@ -92,7 +135,7 @@ class DataManager extends AsyncTask<String, Boolean, String> {
 
         // TODO : 로컬 DB로부터 즐겨찾기 데이터를 불러옵니다.
         // 불러온 데이터를 리스트에 저장합니다.
-        // for(int i = 0; i < 1; i++)  // List_Favorite.add(loadded_favorite_data);
+
 
         // 초기화가 한 번이라도 진행되었다는 것을 나타내기 위해 플레그를 세웁니다.
         isInit = true;
@@ -237,128 +280,11 @@ class FireBase {
 
 }
 
-// 즐겨찾기 저장, 불러오기를 지원하는 SQLite 클래스
-class FavoriteDB extends SQLiteOpenHelper {
-
-    private static final String DATABASE_NAME = "Favorite.db";
-    private static final int DATABASE_VERSION = 1;
-
-    private static final String TABLE_NAME = "Favorite";
-    private static final String COLUMN_INDEX = "favortie_id";
-    private static final String COLUMN_PARKINGLOT_ID = "parkinglotID";
-    private static final String COLUMN_PARKINGLOT_NAME = "parkinglotName";
-
-    private static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + TABLE_NAME + " (" +
-                    COLUMN_INDEX  + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    COLUMN_PARKINGLOT_ID + " TEXT NOT NULL," +
-                    COLUMN_PARKINGLOT_NAME + " TEXT NOT NULL" +
-                    ")";
-
-    public FavoriteDB(Context c){
-        super(c, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS "+ TABLE_NAME);
-        onCreate(db);
-    }
-    public long insert (String parkID, String parkName){
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues cvs = new ContentValues();
-        cvs.put(COLUMN_PARKINGLOT_ID, parkID);
-        cvs.put(COLUMN_PARKINGLOT_NAME, parkName);
-
-        long newRowId = db.insert(FavoriteDB.TABLE_NAME, null, cvs);
-        // return -1 => 오류 발생
-        return newRowId;
-    }
-    public int delete(String parkID){
-        SQLiteDatabase db = getWritableDatabase();
-        return db.delete(TABLE_NAME, parkID, null);
-    }
-    public ArrayList select(){
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor;
-        ArrayList list = new ArrayList();
-
-        cursor = db.rawQuery("SELECT * from "+ TABLE_NAME, null);
-
-        while(cursor.moveToNext()){
-            StringBuffer item = new StringBuffer();
-            item.append(cursor.getString(2));
-            list.add(item.toString());
-        }
-        cursor.close();
-        // 즐겨찾기한 주차장 이름만 리턴
-        return list;
-    }
+// FavoriteDB 객체
+class FavoriteDB{
+    String parkingID="";
+    String parkingName="";
 }
-// 거리제한 데이터 저장, 변경하는 클래스
-class SearchScopeDB extends SQLiteOpenHelper {
-
-    private static final String DATABASE_NAME = "Favorite.db";
-    private static final int DATABASE_VERSION = 1;
-
-    private static final String TABLE_NAME = "searchscope";
-    private static final String COLUMN_INDEX = "searchscope_id";
-    private static final String COLUMN_SCOPE = "scope";
-
-    private static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + TABLE_NAME + " (" +
-                    COLUMN_INDEX  + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    COLUMN_SCOPE + " INTEGER NOT NULL" +
-                    ")";
-
-    public SearchScopeDB(Context c){
-        super(c, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES);
-        // 검색 반경의 디폴트 값을 주기 위해 insert를 하나 해준다.
-        long result = insert(300);
-        if(result < 0){
-            Log.w("SearchScopeDB", "초기값 삽입 실패");
-        }
-    }
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS "+ TABLE_NAME);
-        onCreate(db);
-    }
-    public long insert (int scope){
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues cvs = new ContentValues();
-        cvs.put(COLUMN_SCOPE, scope);
-        return db.insert(TABLE_NAME, null, cvs);
-    }
-
-    public void update (int scope){
-        SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("UPDATE "+ TABLE_NAME + " SET "+ COLUMN_SCOPE+ "=" + scope + " WHERE "+ COLUMN_INDEX+ "=1");
-    }
-    public int select(){
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor;
-        int scope;
-        cursor = db.rawQuery("SELECT * from "+ TABLE_NAME, null);
-        cursor.moveToFirst();
-
-        scope = cursor.getInt(1);
-        cursor.close();
-        // 즐겨찾기한 주차장 이름만 리턴
-        return scope;
-    }
-}
-
 
 // TODO : 즐겨찾기 객체 만들기
 class Favorite {
