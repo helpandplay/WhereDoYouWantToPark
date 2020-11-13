@@ -12,7 +12,7 @@ import android.widget.ImageButton;
 import java.util.Arrays; // 검색내용 저장하기 위한 어레이 배열
 import java.util.ArrayList; // 위와 같음
 
-// 구글 지도 import
+//구글 지도 import
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -133,10 +133,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng test = new LatLng(37, 127);
+        LatLng latLng = new LatLng(36.355422, 127.421316);
         mMap.addMarker(new MarkerOptions()
-                .position(test)
-                .title("Testest"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(test));
+                .position(latLng)
+                .title("한남대"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(15));
     }
 }
