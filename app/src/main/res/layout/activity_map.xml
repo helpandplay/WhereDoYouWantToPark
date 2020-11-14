@@ -44,6 +44,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchBar" />
 
+    <TextView
+        android:id="@+id/dbtest"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:text="test"
+        android:textSize="30sp" />
+
     <Button
         android:id="@+id/btn_parkinglot_detail_open"
         android:layout_width="wrap_content"
@@ -125,5 +135,6 @@
         app:srcCompat="@android:drawable/ic_menu_mylocation" />
 
     <!--<include layout="@layout/navigation_test"/> 네비게이션 테스트-->
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,6 +8,7 @@ import android.os.Bundle; //String을 쓰기위함
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import java.util.Arrays; // 검색내용 저장하기 위한 어레이 배열
 import java.util.ArrayList; // 위와 같음
@@ -20,6 +21,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.w3c.dom.Text;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
     public static Context context_MainScreen;
@@ -38,6 +41,35 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // 레이아웃의 search_view 즉, 검색창의 값을 가져옴
         // 검색 기능 테스트를 위해 일단 Textview 값을 가져옴 추후 삭제
         // 50번재줄의 값을 받아옴
+
+        //dbtest Favorite 테스트완료
+//        TextView dbtest = (TextView) findViewById(R.id.dbtest);
+////        DataManager.setContext(this);
+////        DataManager.insertFavoriteElement("idtest", "nametest");
+////        DataManager.insertFavoriteElement("idtest2", "nametest2");
+////        ArrayList<FavoriteDB> testFavorite = DataManager.ReadFavoriteList();
+////        String result="";
+////        for(int i=0; i<testFavorite.size(); i++){
+////            result += testFavorite.get(i).parkingName + testFavorite.get(i).parkingID;
+////        }
+////        dbtest.setText(result);
+////        DataManager.deleteFavoriteElement("nametest");
+
+        //dbtest map 테스트 완료
+//        TextView dbtest = (TextView) findViewById(R.id.dbtest);
+//       DataManager.setContext(this);
+//        String scope = DataManager.ReadSearchScope();
+//        ArrayList<FavoriteDB> testFavorite = DataManager.ReadFavoriteList();
+//        String result="";
+//        for(int i=0; i<testFavorite.size(); i++){
+//            result += testFavorite.get(i).parkingName + testFavorite.get(i).parkingID;
+//        }
+//        dbtest.setText(scope);
+//        DataManager.deleteFavoriteElement("nametest");
+
+
+
+
 
         option_drawerLayout = (DrawerLayout)findViewById(R.id.option_drawer_view);//activity_main의 option 드로워기능
         option_drawerView = (View)findViewById(R.id.option_drawer);//option_drawer의 드로워 모양

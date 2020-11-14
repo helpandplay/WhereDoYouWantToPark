@@ -62,8 +62,8 @@ class DataManager extends AsyncTask<String, Boolean, String> {
 
         while(cursor.moveToNext()){
             FavoriteDB favoriteDB = new FavoriteDB();
-            favoriteDB.parkingID=cursor.getColumnName(1);
-            favoriteDB.parkingName=cursor.getColumnName(2);
+            favoriteDB.parkingID=cursor.getString(cursor.getColumnIndex("ParkingLot_id"));
+            favoriteDB.parkingName=cursor.getString(cursor.getColumnIndex("ParkingLot_name"));
             list.add(favoriteDB);
         }
         cursor.close();
@@ -102,6 +102,19 @@ class DataManager extends AsyncTask<String, Boolean, String> {
         db.close();
     }
 
+    //지도 거리 디폴트 값 설정
+    private static void insertDefaultSearchScope(){
+        ScopeDBHelper = new ParkingLotDBHelper(nowContext, scopeDBName);
+        db =  ScopeDBHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("Scope_distance", "200");
+        long result = db.insert(scopeDBName, null, values);
+        if(result >0){
+            Log.i("","거리설정 디폴트값 추가 성공");
+        }else{
+            Log.w("","거리설정 디폴트값 추가 실패");
+        }
+    }
     //지도 거리 설정값 불러오기
     //Context : 현재 화면의 context
     public static String ReadSearchScope(){
@@ -111,15 +124,14 @@ class DataManager extends AsyncTask<String, Boolean, String> {
         db =  ScopeDBHelper.getReadableDatabase();
         cursor = db.rawQuery(ScopeDBSQL.DATA_READ, null);
 
-        if(cursor.moveToFirst()){
-            cursor.moveToFirst();
-            result = cursor.getColumnName(1);
-            Log.i("", "거리 설정 가져오기 완료");
-        }else{
-            Log.w("","거리 설정 가져오기 실패");
-            db.close();
-            result= "가져오기실패";
+        if(!cursor.moveToFirst()){
+            insertDefaultSearchScope();
         }
+        cursor = db.rawQuery(ScopeDBSQL.DATA_READ, null);
+        cursor.moveToFirst();
+        result = cursor.getString(cursor.getColumnIndex("Scope_distance"));
+        Log.i("", "거리 설정 가져오기 완료");
+
         cursor.close();
         db.close();
         return result;

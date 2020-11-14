@@ -24,25 +24,19 @@ public class ParkingLotDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql;
-        if(TBL_NAME == "Favorite"){
-            sql = FavoriteDBSQL.CREATE_TBL;
-        }else if(TBL_NAME == "Scope"){
-            sql = ScopeDBSQL.CREATE_TBL;
-        }else{
-            Log.w("", "DB생성 실패"+TBL_NAME+"을 찾을 수 없습니다.");
-            return;
-        }
-        db.execSQL(sql);
-
+        db.execSQL(FavoriteDBSQL.CREATE_TBL);
+        db.execSQL(ScopeDBSQL.CREATE_TBL);
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         String sql;
         if(TBL_NAME == "Favorite"){
             sql = FavoriteDBSQL.DROP_TBL;
-        }else{
+        }else if(TBL_NAME == "Scope"){
             sql = ScopeDBSQL.DROP_TBL;
+        }else{
+            Log.w("", "DB업글 실패"+TBL_NAME+"을 찾을 수 없습니다.");
+            return;
         }
         db.execSQL(sql);
         onCreate(db);
