@@ -33,9 +33,10 @@ class DataManager extends AsyncTask<String, Boolean, String> {
     private static String favoriteDBName = "Favorite";
     public static String defaultSearchScope = "200";
 
-    public DataManager(boolean useFireBaseDB, boolean doPrintDebug){
+    public DataManager(boolean useFireBaseDB, boolean doPrintDebug, LoadingActivity la){
         this.useFireBaseDB = useFireBaseDB;
         this.doPrintDebug = doPrintDebug;
+        this.la = la;
     }
     //Context 저장
     //DB를 사용하려면 이 메소드를 호출해서 context를 업데이트 해줘야합니다.

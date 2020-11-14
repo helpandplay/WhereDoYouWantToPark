@@ -26,7 +26,7 @@ public class LoadingActivity extends AppCompatActivity {
 
 
         // 비동기 작업을 위해 AsyncTesk 를 상속한 DataManager 객체 생성 후 실행
-        DataManager dm = new DataManager(useFireBaseDB, doPrintDebug);
+        DataManager dm = new DataManager(useFireBaseDB, doPrintDebug, this);
         dm.execute("");
     }
 
