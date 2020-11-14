@@ -1,8 +1,16 @@
 package com.example.capston_park_application;
 
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -14,21 +22,137 @@ import java.util.ArrayList;
 
 class DataManager extends AsyncTask<String, Boolean, String> {
 
+    private static SQLiteDatabase db;
+    private static ParkingLotDBHelper FavoriteDBHelper;
+    private static ParkingLotDBHelper ScopeDBHelper;
     private boolean useFireBaseDB;
     private boolean doPrintDebug;
+    private static Context nowContext;
     private LoadingActivity la;
+    private static String scopeDBName = "Scope";
+    private static String favoriteDBName = "Favorite";
+    public static String defaultSearchScope = "200";
 
     public DataManager(boolean useFireBaseDB, boolean doPrintDebug, LoadingActivity la){
         this.useFireBaseDB = useFireBaseDB;
         this.doPrintDebug = doPrintDebug;
         this.la = la;
     }
-
+    //Context 저장
+    //DB를 사용하려면 이 메소드를 호출해서 context를 업데이트 해줘야합니다.
+    public static void setContext(Context context){
+        nowContext = context;
+    }
     // 주차장 리스트
     public static ArrayList<ParkingLot> List_ParkingLot;
 
     // 즐겨찾기 리스트
     public static ArrayList<Favorite> List_Favorite;
+    // 즐겨찾기 DB
+    public static ArrayList<FavoriteDB> LIST_Favorite;
+
+    //즐겨찾기 리스트를 불러오기
+    //Context : 현재 화면의 context
+    public static ArrayList<FavoriteDB> ReadFavoriteList(){
+        ArrayList<FavoriteDB> list = new ArrayList<FavoriteDB>();
+        Cursor cursor;
+        FavoriteDBHelper = new ParkingLotDBHelper(nowContext, favoriteDBName);
+        db =  FavoriteDBHelper.getReadableDatabase();
+        cursor = db.rawQuery(FavoriteDBSQL.DATA_READ, null);
+
+        while(cursor.moveToNext()){
+            FavoriteDB favoriteDB = new FavoriteDB();
+            favoriteDB.parkingID=cursor.getString(cursor.getColumnIndex("ParkingLot_id"));
+            favoriteDB.parkingName=cursor.getString(cursor.getColumnIndex("ParkingLot_name"));
+            list.add(favoriteDB);
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
+    //즐겨찾기 요소를 삭제하기
+    //parkingName : 리스트 상에서 보이는 주차장 이름
+    public static void deleteFavoriteElement(String parkingName){
+        FavoriteDBHelper = new ParkingLotDBHelper(nowContext, favoriteDBName);
+        db =  FavoriteDBHelper.getWritableDatabase();
+        int result = db.delete(favoriteDBName, "ParkingLot_name=?", new String[]{parkingName});
+        if(result >0){
+            Log.i("","삭제 완료");
+        }else{
+            Log.w("", "삭제 실패");
+        }
+        db.close();
+    }
+    //즐겨찾기 요소를 삽입하기
+    //parkingID : csv에서 가져온 주차장 고유번호
+    //parkingName : 호면에 보이는 주차장 이름
+    public static void insertFavoriteElement(String parkingID, String parkingName){
+        FavoriteDBHelper = new ParkingLotDBHelper(nowContext, favoriteDBName);
+        db =  FavoriteDBHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("ParkingLot_id", parkingID);
+        values.put("ParkingLot_name", parkingName);
+
+        long result = db.insert(favoriteDBName, null, values);
+        if(result >0){
+            Log.i("","즐겨찾기 요소 추가 성공");
+        }else{
+            Log.w("","즐겨찾기 요소 추가 실패");
+        }
+        db.close();
+    }
+
+    //지도 거리 디폴트 값 설정
+    private static void insertDefaultSearchScope(){
+        ScopeDBHelper = new ParkingLotDBHelper(nowContext, scopeDBName);
+        db =  ScopeDBHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("Scope_distance", "200");
+        long result = db.insert(scopeDBName, null, values);
+        if(result >0){
+            Log.i("","거리설정 디폴트값 추가 성공");
+        }else{
+            Log.w("","거리설정 디폴트값 추가 실패");
+        }
+    }
+    //지도 거리 설정값 불러오기
+    //Context : 현재 화면의 context
+    public static String ReadSearchScope(){
+        String result;
+        Cursor cursor;
+        ScopeDBHelper = new ParkingLotDBHelper(nowContext, scopeDBName);
+        db =  ScopeDBHelper.getReadableDatabase();
+        cursor = db.rawQuery(ScopeDBSQL.DATA_READ, null);
+
+        if(!cursor.moveToFirst()){
+            insertDefaultSearchScope();
+        }
+        cursor = db.rawQuery(ScopeDBSQL.DATA_READ, null);
+        cursor.moveToFirst();
+        result = cursor.getString(cursor.getColumnIndex("Scope_distance"));
+        Log.i("", "거리 설정 가져오기 완료");
+
+        cursor.close();
+        db.close();
+        return result;
+    }
+    //지도 설정값 바꾸기
+    public static void UpdateSearchScope(String distance){
+        ScopeDBHelper = new ParkingLotDBHelper(nowContext, scopeDBName);
+        db =  ScopeDBHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("Scope_distance", distance);
+
+        int result = db.update(scopeDBName, values, "Scope_distance=?", new String[]{distance});
+        if(result != 1){
+            Log.w("","거리 설정 업데ㅐ이트 실패" );
+        }else{
+            Log.i("","거리 설정 업데ㅐ이트 성공" );
+        }
+        db.close();
+    }
+
+
 
     // 초기화 되었는지를 나타내는 boolean 형 플래그
     private static boolean isInit = false;
@@ -44,6 +168,7 @@ class DataManager extends AsyncTask<String, Boolean, String> {
         // 리스트 초기화
         List_ParkingLot = new ArrayList<ParkingLot>();
         List_Favorite = new ArrayList<Favorite>();
+
 
         // 파이어베이스에서 주차장 데이터를 가져옵니다.
         if(useFireBaseDB){
@@ -84,10 +209,6 @@ class DataManager extends AsyncTask<String, Boolean, String> {
             Log.d("", "경도 : " + d.getLongittude());
         }
 
-
-        // TODO : 로컬 DB로부터 즐겨찾기 데이터를 불러옵니다.
-        // 불러온 데이터를 리스트에 저장합니다.
-        // for(int i = 0; i < 1; i++)  // List_Favorite.add(loadded_favorite_data);
 
         // 초기화가 한 번이라도 진행되었다는 것을 나타내기 위해 플레그를 세웁니다.
         isInit = true;
@@ -230,27 +351,53 @@ class FireBase {
         return Result;
     }
 
-
-
-
-
-
 }
 
-
-
+// FavoriteDB 객체
+class FavoriteDB{
+    String parkingID="";
+    String parkingName="";
+}
 
 // TODO : 즐겨찾기 객체 만들기
 class Favorite {
 
     private String ID_ParkingLot;
+    private String Name_ParkingLot;
+    private String Address_new;
+    private String Address_old;
+    private String Capacity;
 
-    public Favorite(String ID_ParkingLot) {
-        this.ID_ParkingLot = ID_ParkingLot;
+    public Favorite(String id, String name, String addr_new, String addr_old, String cap) {
+        this.ID_ParkingLot = id;
+        this.Name_ParkingLot = name;
+        this.Address_new = addr_new;
+        this.Address_old = addr_old;
+        this.Capacity = cap;
+    }
+
+    public Favorite(ParkingLot plot) {
+        this.ID_ParkingLot = plot.getID_ParkingLot();
+        this.Name_ParkingLot = plot.getName_ParkingLot();
+        this.Address_new = plot.getAddress_new();
+        this.Address_old = plot.getAddress_old();
+        this.Capacity = plot.getCapacity();
     }
 
     public String getID_ParkingLot() {
-        return this.ID_ParkingLot;
+        return ID_ParkingLot;
+    }
+    public String getName_ParkingLot() {
+        return Name_ParkingLot;
+    }
+    public String getAddress_new() {
+        return Address_new;
+    }
+    public String getAddress_old() {
+        return Address_old;
+    }
+    public String getCapacity() {
+        return Capacity;
     }
 
 }
