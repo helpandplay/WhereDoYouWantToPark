@@ -42,6 +42,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // 검색 기능 테스트를 위해 일단 Textview 값을 가져옴 추후 삭제
         // 50번재줄의 값을 받아옴
 
+        //DB 받아오는 예시코드
+        // DataManager.java에서 return 타입 확인, 메소드명 확인하여 사용하세요.
+
         //dbtest Favorite 테스트완료
 //        TextView dbtest = (TextView) findViewById(R.id.dbtest);
 ////        DataManager.setContext(this);
