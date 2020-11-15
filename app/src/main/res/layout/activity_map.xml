@@ -135,6 +135,9 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_favorite_open"
         app:srcCompat="@android:drawable/ic_menu_mylocation" />
 
+
+
+
     <!--<include layout="@layout/navigation_test"/> 네비게이션 테스트-->
 
 

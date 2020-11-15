@@ -1,19 +1,29 @@
 package com.example.capston_park_application;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle; //String을 쓰기위함
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Arrays; // 검색내용 저장하기 위한 어레이 배열
 import java.util.ArrayList; // 위와 같음
 
 //구글 지도 import
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -32,6 +42,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     View option_drawerView, favorite_drawerView, parkinglot_drawerView;
 
     private GoogleMap mMap;
+    private FusedLocationProviderClient mFusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { //savedInstanceState = 세로, 가로 화면변경시 전역변수 초기화를 방지
@@ -71,15 +82,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 //        DataManager.deleteFavoriteElement("nametest");
 
 
-
-
-
-        option_drawerLayout = (DrawerLayout)findViewById(R.id.option_drawer_view);//activity_main의 option 드로워기능
-        option_drawerView = (View)findViewById(R.id.option_drawer);//option_drawer의 드로워 모양
-        favorite_drawerLayout = (DrawerLayout)findViewById(R.id.favorite_drawer_view);//activity_main의 favorite 드로워기능
-        favorite_drawerView = (View)findViewById(R.id.favorite_drawer);//favorite_drawer의 드로워 모양
-        parkinglot_drawerLayout = (DrawerLayout)findViewById(R.id.parkinglot_drawer_view);//activity_main의 parkinglot_deatil 드로워기능
-        parkinglot_drawerView = (View)findViewById(R.id.parkinglot_drawer);//parkinglot_deatil의 드로워 모양
+        option_drawerLayout = (DrawerLayout) findViewById(R.id.option_drawer_view);//activity_main의 option 드로워기능
+        option_drawerView = (View) findViewById(R.id.option_drawer);//option_drawer의 드로워 모양
+        favorite_drawerLayout = (DrawerLayout) findViewById(R.id.favorite_drawer_view);//activity_main의 favorite 드로워기능
+        favorite_drawerView = (View) findViewById(R.id.favorite_drawer);//favorite_drawer의 드로워 모양
+        parkinglot_drawerLayout = (DrawerLayout) findViewById(R.id.parkinglot_drawer_view);//activity_main의 parkinglot_deatil 드로워기능
+        parkinglot_drawerView = (View) findViewById(R.id.parkinglot_drawer);//parkinglot_deatil의 드로워 모양
 
         ///////////////////슬라이드로 닫거나 열지 못하게 막음///////////////////
         option_drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
@@ -90,12 +98,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         parkinglot_drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         //////////////////////////////////////////////////////////////////////
         ///////////////////각각 open, close 버튼 변수 저장///////////////////
-        final ImageButton btn_open = (ImageButton)findViewById(R.id.btn_option_open);
-        final Button btn_close = (Button)findViewById(R.id.btn_option_close);
-        final ImageButton favorite_open = (ImageButton)findViewById(R.id.btn_favorite_open);
-        final Button favorite_close = (Button)findViewById(R.id.btn_favorite_close);
-        final Button btn_parkinglot_open = (Button)findViewById(R.id.btn_parkinglot_detail_open);
-        final Button parkinglot_close = (Button)findViewById(R.id.btn_parkinglot_detail_close);
+        final ImageButton btn_open = (ImageButton) findViewById(R.id.btn_option_open);
+        final Button btn_close = (Button) findViewById(R.id.btn_option_close);
+        final ImageButton favorite_open = (ImageButton) findViewById(R.id.btn_favorite_open);
+        final Button favorite_close = (Button) findViewById(R.id.btn_favorite_close);
+        final Button btn_parkinglot_open = (Button) findViewById(R.id.btn_parkinglot_detail_open);
+        final Button parkinglot_close = (Button) findViewById(R.id.btn_parkinglot_detail_close);
         ////////////////////////////////////////////////////////////////////
 
         ///////////////////옵션, 즐겨찾기, 주차장디테일 버튼 클릭시 드로워 이벤트 들///////////////////
@@ -174,5 +182,50 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .title("한남대"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+
+        //GPS기능 on/off 문구와 현재 위치 표시 및 현재 위치로 이동
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            googleMap.setMyLocationEnabled(true);
+        } else {
+            checkLocationPermissionWithRationale();
+
+        }
     }
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
+    private void checkLocationPermissionWithRationale() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                new AlertDialog.Builder(this)
+                        .setTitle("위치정보")
+                        .setMessage("이 앱을 사용하기 위해서는 위치정보에 접근이 필요합니다. 위치정보 접근을 허용하여 주세요.")
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ActivityCompat.requestPermissions(MapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+                            }
+                        }).create().show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        GoogleMap googleMap;
+                        mMap.setMyLocationEnabled(true);
+                    }
+                } else {
+                    Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+        }
+    }
+
 }
