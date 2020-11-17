@@ -12,8 +12,11 @@
         android:id="@+id/rv_favorite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="9"
         android:layout_marginBottom="5dp"
-        />
+        >
+
+    </androidx.recyclerview.widget.RecyclerView>
 
     <Button
         android:id="@+id/btn_favorite_close"
