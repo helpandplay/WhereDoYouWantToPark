@@ -15,6 +15,7 @@ import android.os.Bundle; //String을 쓰기위함
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.w3c.dom.Text;
@@ -81,7 +83,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 //        dbtest.setText(scope);
 //        DataManager.deleteFavoriteElement("nametest");
 
-
         option_drawerLayout = (DrawerLayout) findViewById(R.id.option_drawer_view);//activity_main의 option 드로워기능
         option_drawerView = (View) findViewById(R.id.option_drawer);//option_drawer의 드로워 모양
         favorite_drawerLayout = (DrawerLayout) findViewById(R.id.favorite_drawer_view);//activity_main의 favorite 드로워기능
@@ -114,6 +115,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 option_drawerLayout.setVisibility(View.VISIBLE);
                 option_drawerLayout.openDrawer(option_drawerView);
                 btn_parkinglot_open.setVisibility(View.INVISIBLE);
+                favorite_open.setVisibility(View.INVISIBLE);
                 option_drawerLayout.bringToFront();
             }
         });
@@ -123,6 +125,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 btn_open.setVisibility(View.VISIBLE);
                 option_drawerLayout.setVisibility(View.GONE);
                 btn_parkinglot_open.setVisibility(View.VISIBLE);
+                favorite_open.setVisibility(View.VISIBLE);
                 option_drawerLayout.closeDrawers();
             }
         });
@@ -130,7 +133,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         favorite_open.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {   //즐겨찾기 버튼 open 클릭시
-                favorite_open.setVisibility(View.INVISIBLE);
                 favorite_drawerLayout.setVisibility(View.VISIBLE);
                 favorite_drawerLayout.openDrawer(favorite_drawerView);
                 btn_parkinglot_open.setVisibility(View.INVISIBLE);
@@ -141,21 +143,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         favorite_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {   //겨찾기 버튼 close 클릭시
-                favorite_open.setVisibility(View.VISIBLE);
                 favorite_drawerLayout.setVisibility(View.GONE);
                 btn_parkinglot_open.setVisibility(View.VISIBLE);
                 favorite_drawerLayout.closeDrawers();
             }
         });
-        btn_parkinglot_open.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {   //주차장 디테일 버튼 open 클릭시
-                btn_parkinglot_open.setVisibility(View.INVISIBLE);
-                parkinglot_drawerLayout.setVisibility(View.VISIBLE);
-                parkinglot_drawerLayout.openDrawer(parkinglot_drawerView);
-                parkinglot_drawerLayout.bringToFront();
-            }
-        });
+
         parkinglot_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {   //주차장 디테일 버튼 close 클릭시
@@ -174,22 +167,54 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng latLng = new LatLng(36.355422, 127.421316);
-        mMap.addMarker(new MarkerOptions()
-                .position(latLng)
-                .title("한남대"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(15));
-
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         //GPS기능 on/off 문구와 현재 위치 표시 및 현재 위치로 이동
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        /*if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             googleMap.setMyLocationEnabled(true);
         } else {
             checkLocationPermissionWithRationale();
+        }*/
+        MarkerClickEvent();
+    }
 
-        }
+    public void MarkerClickEvent(){
+        LatLng latLng = new LatLng(36.355422, 127.421316);
+        mMap.addMarker(new MarkerOptions().position(latLng).title("한남대"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+
+        ///////////////////parkinglot_detail.xml 의 id값들///////////////////
+        final TextView parkinglot_name = findViewById(R.id.parkinglot_name);
+        final TextView parkinglot_address = findViewById(R.id.parkinglot_address_new);
+        final TextView parkinglot_distance = findViewById(R.id.parkinglot_distance);
+        final TextView parkinglot_time = findViewById(R.id.parkinglot_time);
+        //  final TextView parkinglot_test = findViewById(databaseList())
+        ////////////////////////////////////////////////////////////////////
+
+        final ListView listView = findViewById(R.id.parkinglot_listView);
+        final View view = findViewById(R.id.parkinglot_drag);
+
+        ///////////////////마커 클릭시 이벤트처리///////////////////
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                ///////////////////클릭시 마커가 가진 정보로 변경///////////////////
+                //지도에 위도경도값을 가진 주차장 마커가 생길경우
+                //마커 클릭시 해당 위도경도를 가진 주차장의 이름, 주소, 운영시간등 값을
+                //setText() 괄호안에 넣으면 됌
+                parkinglot_name.setText("한남대");
+                parkinglot_address.setText("");
+                parkinglot_time.setText("");
+                parkinglot_distance.setText("");
+
+                //view.bringToFront(); 구글맵 앞에 위치시키면 앱이 튕김
+                //view.performClick(); 마커클릭해서 리스트뷰 나오면 앱이 튕김
+                parkinglot_drawerLayout.setVisibility(View.VISIBLE);
+                parkinglot_drawerLayout.openDrawer(parkinglot_drawerView);
+                parkinglot_drawerLayout.bringToFront();
+                return false;
+            }
+        });
     }
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
@@ -227,5 +252,4 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         }
     }
-
 }

@@ -46,5 +46,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     api 'com.google.android.gms:play-services-location:17.1.0'
     api 'com.google.android.gms:play-services-maps:17.0.0'
+
+    // 슬라이딩
+    implementation 'com.sothree.slidinguppanel:library:3.4.0'
 }
 

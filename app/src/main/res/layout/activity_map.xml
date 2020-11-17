@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,20 +7,20 @@
     tools:context=".MapActivity">
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        android:name="com.google.android.gms.maps.MapFragment"
         android:id="@+id/map"
+        android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <!--검색창-->
     <SearchView
         android:id="@+id/searchBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="60dp"
-        android:background="#77939393"
+        android:layout_marginStart="16sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginEnd="60sp"
+        android:background="@drawable/border"
         android:queryBackground="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,11 +32,11 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="0dp"
+        android:layout_width="0sp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16sp"
+        android:layout_marginTop="32sp"
+        android:layout_marginEnd="16sp"
         android:text="Serach_test"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,94 +48,106 @@
         android:id="@+id/dbtest"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
         android:text="test"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        tools:layout_editor_absoluteX="-39sp"
+        tools:layout_editor_absoluteY="68sp" />
 
     <Button
         android:id="@+id/btn_parkinglot_detail_open"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="124dp"
-        android:text="parkinglot_detail"
+        android:layout_width="0sp"
+        android:layout_height="0sp"
+        android:layout_marginStart="124sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.499" />
+
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/parkinglot_drawer_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
         tools:context=".MainActivity">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </LinearLayout>
-        <include layout="@layout/parkinglot_detail"/>
+            android:layout_height="match_parent"></LinearLayout>
+
+        <include layout="@layout/parkinglot_detail" />
     </androidx.drawerlayout.widget.DrawerLayout>
 
     <!--즐겨찾기 버튼-->
     <ImageButton
         android:id="@+id/btn_favorite_open"
-        android:layout_width="45dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/searchBar"
+        android:layout_width="53dp"
+        android:layout_height="52dp"
+        android:background="#00000000"
+        android:elevation="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.955"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/btn_star_big_on" />
+        app:layout_constraintVertical_bias="0.976"
+        app:srcCompat="@drawable/ic_baseline_star_24" />
+
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/favorite_drawer_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
         tools:context=".MainActivity">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </LinearLayout>
-        <include layout="@layout/favorite_drawer"/>
+            android:layout_height="match_parent"></LinearLayout>
+
+        <include layout="@layout/favorite_drawer" />
     </androidx.drawerlayout.widget.DrawerLayout>
 
     <!--옵션 버튼-->
+
+    <!--@android:drawable/ic_dialog_dialer-->
+
     <ImageButton
         android:id="@+id/btn_option_open"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="51dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/searchBar"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_dialog_dialer" />
+        app:srcCompat="@drawable/ic_baseline_build_24" />
+
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/option_drawer_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
         tools:context=".MainActivity">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </LinearLayout>
-        <include layout="@layout/option_drawer"/>
+            android:layout_height="match_parent"></LinearLayout>
+
+        <include layout="@layout/option_drawer" />
     </androidx.drawerlayout.widget.DrawerLayout>
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:background="@drawable/border"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.036"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_favorite_open"
-        app:srcCompat="@android:drawable/ic_menu_mylocation" />
-
-
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.123"
+        app:srcCompat="@drawable/ic_baseline_near_me_24" />
 
     <!--<include layout="@layout/navigation_test"/> 네비게이션 테스트-->
 
