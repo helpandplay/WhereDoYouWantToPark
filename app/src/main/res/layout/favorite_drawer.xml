@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="left"
-    android:background="#8ACBF6">
+    android:background="#FFFFFF">
 
     <Button
         android:id="@+id/btn_favorite_close"

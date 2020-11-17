@@ -45,7 +45,6 @@ class DataManager extends AsyncTask<String, Boolean, String> {
     }
     // 주차장 리스트
     public static ArrayList<ParkingLot> List_ParkingLot;
-
     // 즐겨찾기 리스트
     public static ArrayList<Favorite> List_Favorite;
     // 즐겨찾기 DB
