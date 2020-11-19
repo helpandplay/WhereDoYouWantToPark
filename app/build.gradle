@@ -49,5 +49,8 @@ dependencies {
 
     // 슬라이딩
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
+
+    //리사이클러뷰
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 }
 
