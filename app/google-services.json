@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "1019319860827",
+    "firebase_url": "https://capstone-bf910.firebaseio.com",
+    "project_id": "capstone-bf910",
+    "storage_bucket": "capstone-bf910.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1019319860827:android:b8e6f1870379c30fdec97e",
+        "android_client_info": {
+          "package_name": "com.example.capston_park_application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1019319860827-jmuaimlfssag59tt1gq9bdv9bi93krlr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWjXtyECQwy-XTYpO7N1PKSdE-d5mWBmU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1019319860827-jmuaimlfssag59tt1gq9bdv9bi93krlr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1019319860827:android:25d7012db548619edec97e",
+        "android_client_info": {
+          "package_name": "com.example.projectweatherviewer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1019319860827-jmuaimlfssag59tt1gq9bdv9bi93krlr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWjXtyECQwy-XTYpO7N1PKSdE-d5mWBmU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1019319860827-jmuaimlfssag59tt1gq9bdv9bi93krlr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

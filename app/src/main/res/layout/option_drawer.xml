@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/option_drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/option_drawer"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/searchbar_background"
+        android:elevation="10dp"
+        android:visibility="gone">
+        <!-- 추가할땐 위 를 visible로 바꾼후 추가후 다시 gone-->
+
+        <ImageButton
+            android:id="@+id/btn_option_close"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/button_background"
+            app:srcCompat="@drawable/option_close_btn_image" />
+    </RelativeLayout>
+</RelativeLayout>
