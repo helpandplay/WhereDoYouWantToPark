@@ -11,6 +11,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle; //String을 쓰기위함
 import android.text.TextUtils;
@@ -19,47 +21,108 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.Arrays; // 검색내용 저장하기 위한 어레이 배열
 import java.util.ArrayList; // 위와 같음
+import java.util.List;
 
 //구글 지도 import
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
     public static Context context_MainScreen;
-
+    SearchView searchview;
     View option_drawerView, option_drawerlayout, favorite_drawerView, favorite_drawerlayout, search_layout, parkinglot_layout;
-
+    ImageButton option_open, option_close, favorite_open, location , zoomin, zoomout;
+    Button favorite_close;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
     private int ViewDistance = 2500;
     private boolean mLocationPermission = false;
     private final int Location_Permission = 1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) { //savedInstanceState = 세로, 가로 화면변경시 전역변수 초기화를 방지
         context_MainScreen = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        final ImageButton mylocation = (ImageButton)findViewById(R.id.mylocation);
+        zoomin = findViewById(R.id.zoomin);
+        zoomout = findViewById(R.id.zoomout);
+        option_open = findViewById(R.id.btn_option_open);
+        option_close = findViewById(R.id.btn_option_close);
+        favorite_open = findViewById(R.id.btn_favorite_open);
+        favorite_close = findViewById(R.id.btn_favorite_close);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+        //주소 검색기능
+        searchview = findViewById(R.id.searchBar);
+        searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                String searchlocation = searchview.getQuery().toString();
+                Address address;
+                List<Address> addressList = null;
+                if(searchlocation != null || !searchlocation.equals("")){
+                    Geocoder geocoder = new Geocoder(MapActivity.this);
+                    try{
+                        addressList = geocoder.getFromLocationName(searchlocation, 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if(addressList != null){
+                        if(addressList.size()==0) { //주소 검색을 잘못해 geocoder로 부터 값을 전달받지 못했을경우 ex) seoul 이 아닌 soeul 등
+                            Toast locationToast = Toast.makeText(getApplicationContext(), "해당 주소는 존재하지 않습니다", Toast.LENGTH_SHORT);
+                            locationToast.show();
+                        }
+                        else { //정상적인 주소검색으로 geocoder로 부터 값을 받을경우
+                            address = addressList.get(0);
+                            LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,16));//숫자값 높으면 줌인 낮으면 줌아웃 1~21
+                        }
+                    }
+                }
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        //카메라 줌인 줌아웃//
+        zoomin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMap.animateCamera(CameraUpdateFactory.zoomIn());
+            }
+        });
+        zoomout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMap.animateCamera(CameraUpdateFactory.zoomOut());
+            }
+        });
+        ////////////////////
+        final Animation translateDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_down);
         final Animation translateLeft = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_left);
         final Animation translateRight = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_right);
         // TODO : 데이터 준비
@@ -70,17 +133,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         favorite_drawerView = (View)findViewById(R.id.favorite_drawer);
         favorite_drawerlayout = (View)findViewById(R.id.favorite_drawer_layout);
         search_layout = (View)findViewById(R.id.relative);
-
-        ///////////////////버튼 변수 저장///////////////////
-        final ImageButton mylocation = (ImageButton)findViewById(R.id.mylocation);
-        final ImageButton zoomin = (ImageButton)findViewById(R.id.zoomin);
-        final ImageButton zoomout = (ImageButton)findViewById(R.id.zoomout);
-        final ImageButton option_open = (ImageButton) findViewById(R.id.btn_option_open);
-        final ImageButton option_close = (ImageButton) findViewById(R.id.btn_option_close);
-        final ImageButton favorite_open = (ImageButton) findViewById(R.id.btn_favorite_open);
-        final Button favorite_close = (Button) findViewById(R.id.btn_favorite_close);
-        final ImageButton location = (ImageButton) findViewById(R.id.mylocation);
-        ////////////////////////////////////////////////////
 
         ///////////////////옵션, 즐겨찾기 클릭시 드로워 이벤트 들///////////////////
         option_open.setOnClickListener(new View.OnClickListener() {
@@ -151,16 +203,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
         // gps버튼 클릭시 내 위치로 부드럽게 이동
-        location.setOnClickListener(new View.OnClickListener() {
+        mylocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (checkLocationPermission()) {
                     fusedLocationClient.getLastLocation()
                             .addOnSuccessListener(MapActivity.this, new OnSuccessListener<Location>() {
                                 @Override
-                                public void onSuccess(Location location) {
-                                    if (location != null) {
-                                        mMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(),location.getLongitude())));
+                                public void onSuccess(Location mylocation) {
+                                    if (mylocation != null) {
+                                        mMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(mylocation.getLatitude(),mylocation.getLongitude())));
+                                        if (parkinglot_layout.getVisibility() == View.VISIBLE) {
+                                            parkinglot_layout.setVisibility(View.INVISIBLE);
+                                            parkinglot_layout.startAnimation(translateDown);
+                                        }
                                     }
                                 }
                             });
@@ -202,28 +258,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         LatLng latLng = new LatLng(36.355422, 127.421316);
         // mMap.addMarker(new MarkerOptions().position(latLng).title("한남대"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(14));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(16));
+
+        final Animation translateUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_up);
+        final Animation translateDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_down);
 
         final TextView parkinglot_name = findViewById(R.id.parkinglot_name);
         final TextView parkinglot_address_new = findViewById(R.id.parkinglot_address_new);
         final TextView parkinglot_address_old = findViewById(R.id.parkinglot_address_old);
-        //final TextView parkinglot_distance = findViewById(R.id.parkinglot_distance);
-
         final TextView parkinglot_weekly = findViewById(R.id.parkinglot_weekly);
         final TextView parkinglot_sat = findViewById(R.id.parkinglot_sat);
         final TextView parkinglot_weekend = findViewById(R.id.parkinglot_weekend);
-
         final TextView parkinglot_weekly_time = findViewById(R.id.parkinglot_weekly_time);
         final TextView parkinglot_weekly_time_close = findViewById(R.id.parkinglot_weekly_time_close);
         final TextView parkinglot_sat_time = findViewById(R.id.parkinglot_sat_time);
         final TextView parkinglot_sat_time_close = findViewById(R.id.parkinglot_sat_time_close);
         final TextView parkinglot_weekend_time = findViewById(R.id.parkinglot_weekend_time);
         final TextView parkinglot_weekend_time_close = findViewById(R.id.parkinglot_weekend_time_close);
-
         final TextView parkinglot_capacity = findViewById(R.id.parkinglot_capacity);
 
-        final Animation translateUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_up);
-        final Animation translateDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_down);
         final Button closebutton = findViewById(R.id.tableclose);
         ///////////////////마커 클릭시 이벤트처리///////////////////
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {

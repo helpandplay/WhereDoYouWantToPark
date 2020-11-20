@@ -43,8 +43,8 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:background="#000000"
-            android:queryBackground="@android:color/transparent"
-            android:tooltipText="start"></SearchView>
+            android:tooltipText="start">
+        </SearchView>
 
         <!--옵션버튼-->
         <ImageButton
@@ -74,19 +74,6 @@
             android:background="#00000000"
             android:elevation="50dp"
             app:srcCompat="@drawable/favorite" />
-
-        <!--검색창 검색결과-->
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/searchBar"
-            android:layout_marginLeft="10sp"
-            android:text="Serach_test"
-            android:textSize="30sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"/>
     </RelativeLayout>
 
     <ImageButton
@@ -124,4 +111,5 @@
         app:srcCompat="@drawable/zoomout"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/zoomin"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
