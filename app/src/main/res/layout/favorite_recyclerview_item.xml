@@ -102,15 +102,15 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/parkignlot_favorite_button"
+                android:id="@+id/RecyclerView_Favorite_ImageButton_ToggleFavorite"
                 android:layout_gravity="center"
                 android:layout_width="35sp"
                 android:layout_height="35sp"
                 android:layout_margin="4sp"
-                android:src="@drawable/favorite" />
+                android:src="@drawable/favorite_bright" />
 
             <ImageButton
-                android:id="@+id/goto_kakaomap"
+                android:id="@+id/RecyclerView_Favorite_ImageButton_goKakaoMap"
                 android:layout_gravity="center"
                 android:layout_width="40sp"
                 android:layout_height="40sp"

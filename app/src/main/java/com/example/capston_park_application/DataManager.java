@@ -118,6 +118,17 @@ class DataManager extends AsyncTask<String, Integer, String> {
         db.close();
     }
 
+    // 즐겨찾기인가?
+    public static boolean isFavorite(String parkingID){
+        ArrayList<FavoriteDB> list = ReadFavoriteList();
+        for(FavoriteDB f_data : list){
+            if(f_data.parkingID.equals(parkingID)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     //지도 거리 디폴트 값 설정
     //호출할 필요 없습니다. SQLite 로딩 시 자동으로 호출됩니다.
     private static void insertDefaultSearchScope(){
@@ -310,7 +321,7 @@ class DataManager extends AsyncTask<String, Integer, String> {
                 return pl;
             }
         }
-        Log.e("DataManager", "Null return occur");
+        Log.e("DataManager", "널 리턴 발생");
         Log.e("DataManager", "from asParkingLotbyID, arg(ID) : " + ID);
         return null;
     }
@@ -318,11 +329,11 @@ class DataManager extends AsyncTask<String, Integer, String> {
     // 주차장 이름으로 주차장 객체 얻기
     public static ParkingLot getParkingLotbyName(String name){
         for(ParkingLot pl : List_ParkingLot){
-            if(pl.getID_ParkingLot().equals(name)){
+            if(pl.getName_ParkingLot().equals(name)){
                 return pl;
             }
         }
-        Log.e("DataManager", "Null return occur");
+        Log.e("DataManager", "널 리턴 발생");
         Log.e("DataManager", "from asParkingLotbyName, arg(Name) : " + name);
         return null;
     }

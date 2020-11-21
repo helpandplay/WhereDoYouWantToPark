@@ -73,7 +73,7 @@
             android:layout_toStartOf="@id/searchBar"
             android:background="#00000000"
             android:elevation="50dp"
-            app:srcCompat="@drawable/favorite" />
+            app:srcCompat="@drawable/favorite_bright" />
     </RelativeLayout>
 
     <ImageButton

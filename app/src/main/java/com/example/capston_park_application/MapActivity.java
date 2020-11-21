@@ -179,6 +179,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         favorite_open.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                RefreshFavorite();
                 //즐겨찾기 버튼 open 클릭시 옵션창을 제외한 모든 창 안보이게
                 favorite_drawerView.bringToFront();
                 favorite_drawerView.setVisibility(View.VISIBLE);
@@ -285,6 +286,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         final TextView parkinglot_weekend_time = findViewById(R.id.parkinglot_weekend_time);
         final TextView parkinglot_weekend_time_close = findViewById(R.id.parkinglot_weekend_time_close);
         final TextView parkinglot_capacity = findViewById(R.id.parkinglot_capacity);
+        final ImageView parkinglot_favoriteimage = findViewById(R.id.parkignlot_favorite_button);
 
         final Button closebutton = findViewById(R.id.tableclose);
 
@@ -335,7 +337,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                 String temp_address_new = pl.getAddress_new();
                 String temp_address_old = pl.getAddress_old();
-                //parkinglot_distance.setText("");
 
                 //신주소 정보 없을때
                 if(TextUtils.isEmpty(temp_address_new)){
@@ -347,25 +348,46 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 }
 
                 // 주차장 상세정보의 즐겨찾기 아이콘 관련 처리
-                ImageView FavoriteIcon = (ImageView)findViewById(R.id.parkignlot_favorite_button);
-                // TODO : 즐겨찾기 아이콘 즐겨찾기 여부에 따라 모양 변경하기
-                // if(isFavorite()) 노란별 설정 / else 회색별 설정
+                if(!DataManager.isFavorite(pl.getID_ParkingLot())){
+                    parkinglot_favoriteimage.setImageResource(R.drawable.favorite_dark);
+                }
+                else{
+                    parkinglot_favoriteimage.setImageResource(R.drawable.favorite_bright);
+                }
 
 
                 // TODO : 즐겨찾기 아이콘 onClick 이벤트 만들기
                 // if(isFavorite()) 회색별 설정, 즐겨찾기 지우기 / else 노란별 설정, 즐겨찾기 추가하기
                 final ParkingLot finalPl = pl;
-                FavoriteIcon.setOnClickListener(new View.OnClickListener() {
+                parkinglot_favoriteimage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        DataManager.insertFavoriteElement(finalPl.getID_ParkingLot(), finalPl.getName_ParkingLot());
-                        // TODO : 토스트가 출력되지 않음
-                        Toast.makeText(MapActivity.this, finalPl.getName_ParkingLot() + " 을 즐겨찾기에 추가", Toast.LENGTH_LONG);
+                        // 즐겨찾기가 아닌 경우
+                        if(!DataManager.isFavorite(finalPl.getID_ParkingLot())){
+                            // DB에 즐겨찾기 추가
+                            DataManager.insertFavoriteElement(finalPl.getID_ParkingLot(), finalPl.getName_ParkingLot());
+                            // 별을 빛나게
+                            parkinglot_favoriteimage.setImageResource(R.drawable.favorite_bright);
+                            // TODO : 토스트가 출력되지 않음. 고치거나, 대체 필요
+                            Toast.makeText(MapActivity.this, finalPl.getName_ParkingLot() + " 을 즐겨찾기에 추가", Toast.LENGTH_LONG);
+                        }
+                        // 즐겨찾기인 경우
+                        else{
+                            // DB에서 제거
+                            DataManager.deleteFavoriteElement(finalPl.getName_ParkingLot());
+                            // 별 불끄기
+                            parkinglot_favoriteimage.setImageResource(R.drawable.favorite_dark);
+                            // TODO : 토스트가 출력되지 않음. 고치거나, 대체 필요
+                            Toast.makeText(MapActivity.this, finalPl.getName_ParkingLot() + " 을  즐겨찾기에서 삭제", Toast.LENGTH_LONG);
+                        }
+
                     }
                 });
 
                 // TODO : 길찾기 아이콘 onClick 이벤트 만들기
                 // onClick(){ 카카오네비 연결하기 }
+
+
 
 
                 parkinglot_layout.setVisibility(View.VISIBLE);
@@ -491,6 +513,10 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
         TextView Name;
         TextView addrOld;
         TextView addrNew;
+        ImageView Favorite;
+        ImageButton Guide;
+
+        boolean FavoriteFlag = true;
 
         ViewHolder(View itemView) {
             super(itemView) ;
@@ -499,7 +525,8 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
             Name = itemView.findViewById(R.id.RecyclerView_Favorite_ParkinglotName) ;
             addrOld = itemView.findViewById(R.id.RecyclerView_Favorite_TextView_AddressOld) ;
             addrNew = itemView.findViewById(R.id.RecyclerView_Favorite_TextView_AddressNew) ;
-
+            Favorite = itemView.findViewById(R.id.RecyclerView_Favorite_ImageButton_ToggleFavorite);
+            Guide = itemView.findViewById(R.id.RecyclerView_Favorite_ImageButton_goKakaoMap);
         }
 
     }
@@ -539,7 +566,8 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
-    public void onBindViewHolder(SimpleTextAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final SimpleTextAdapter.ViewHolder holder, int position) {
+
         holder.Name.setText(mData.get(position).getName_ParkingLot()) ;
 
         // 구주소 정보 없을때
@@ -557,6 +585,30 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
         else{
             holder.addrNew.setText(mData.get(position).getAddress_new()) ;
         }
+
+        holder.Favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 즐겨찾기 버튼 눌렀을 때
+                ParkingLot pl = DataManager.getParkingLotbyName((String) holder.Name.getText());
+                if(holder.FavoriteFlag){
+                    // 즐겨찾기 상태라면 -> DB에서 지우고 불끈다
+                    holder.FavoriteFlag = false;
+                    holder.Favorite.setImageResource(R.drawable.favorite_dark);
+
+                    DataManager.deleteFavoriteElement((String) holder.Name.getText());
+                }
+                else{
+                    // 즐겨찾기 해제 상태라면 -> DB에 추가하고 불켠다
+                    holder.FavoriteFlag = true;
+                    holder.Favorite.setImageResource(R.drawable.favorite_bright);
+
+                    DataManager.insertFavoriteElement(pl.getID_ParkingLot(), pl.getName_ParkingLot());
+                }
+            }
+        });
+
+
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.
