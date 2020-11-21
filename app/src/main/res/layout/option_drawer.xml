@@ -2,6 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/option_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -15,13 +16,55 @@
         android:visibility="gone">
         <!-- 추가할땐 위 를 visible로 바꾼후 추가후 다시 gone-->
 
-        <ImageButton
-            android:id="@+id/btn_option_close"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/button_background"
-            app:srcCompat="@drawable/option_close_btn_image" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btn_option_close"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:background="@drawable/button_background"
+                app:srcCompat="@drawable/option_close_btn_image" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="97"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="90"
+                    android:textColor="#000000"
+                    android:text="TV1" />
+
+                <TextView
+                    android:id="@+id/TextView_Option_Info01"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom|center"
+                    android:paddingRight="5sp"
+                    android:textSize="14sp"
+                    android:text="@string/Info01"
+                    android:textColor="#171717" />
+                <TextView
+                    android:id="@+id/TextView_Option_Info02"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom|center"
+                    android:paddingRight="5sp"
+                    android:paddingBottom="8sp"
+                    android:textSize="10sp"
+                    android:text="@string/Info02"
+                    android:textColor="#363636"
+                    tools:ignore="SmallSp" />
+            </LinearLayout>
+        </LinearLayout>
+
     </RelativeLayout>
 </RelativeLayout>

@@ -10,7 +10,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     // 파이어베이스를 사용하지 않고 하드코딩 데이터를 사용한다면 false로 변경
     // 파이어베이스와 통신하여 주차장 리스트를 받아온다면 true로 변경
-    private static final boolean useFireBaseDB = true;
+    private static final boolean useFireBaseDB = false;
 
     // 디버그 콘솔을 출력할 것인지 선택
     private static final boolean doPrintDebug = true;

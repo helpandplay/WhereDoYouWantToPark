@@ -8,19 +8,32 @@
         android:id="@+id/favorite_drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:background="@drawable/searchbar_background"
         android:elevation="10dp"
         android:visibility="gone">
         <!-- 추가할땐 위 를 visible로 바꾼후 추가후 다시 gone-->
 
-    <Button
-        android:id="@+id/btn_favorite_close"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginBottom="5dp"
-        android:text="close"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/RecyclerView_Favorite"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="95" />
+
+            <Button
+                android:layout_weight="5"
+                android:id="@+id/btn_favorite_close"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginBottom="5dp"
+                android:text="close" />
+        </LinearLayout>
+
     </RelativeLayout>
 </RelativeLayout>

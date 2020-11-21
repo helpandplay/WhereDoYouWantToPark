@@ -17,7 +17,8 @@ public class SplashActivity extends Activity {
 
         Handler hd = new Handler();
 
-        // TODO : 스플레시 표시하는 시간 조절하기(개발중에는 짧게)
+        // TODO : 스플레시 표시하는 시간 조절하기(개발 중에는 짧게)
+        // delayMillis : 스플레시 창 표시되는 시간(ms단위, 1000ms = 1s)
         hd.postDelayed(new splashhandler(), 500);
     }
 

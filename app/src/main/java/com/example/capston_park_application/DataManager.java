@@ -57,10 +57,6 @@ class DataManager extends AsyncTask<String, Integer, String> {
     }
     // 주차장 리스트
     public static ArrayList<ParkingLot> List_ParkingLot;
-    // 즐겨찾기 리스트
-//    public static ArrayList<Favorite> List_Favorite;
-    // 즐겨찾기 DB
-    public static ArrayList<FavoriteDB> LIST_Favorite;
 
     //즐겨찾기 리스트를 불러오기
     //Context : 현재 화면의 context
@@ -115,9 +111,9 @@ class DataManager extends AsyncTask<String, Integer, String> {
 
         long result = db.insert(favoriteDBName, null, values);
         if(result >0){
-            Log.i("","즐겨찾기 요소 추가 성공");
+            Log.d("","즐겨찾기 요소 추가 성공");
         }else{
-            Log.w("","즐겨찾기 요소 추가 실패");
+            Log.e("","즐겨찾기 요소 추가 실패");
         }
         db.close();
     }
@@ -131,9 +127,9 @@ class DataManager extends AsyncTask<String, Integer, String> {
         values.put("Scope_distance", "200");
         long result = db.insert(scopeDBName, null, values);
         if(result >0){
-            Log.i("","거리설정 디폴트값 추가 성공");
+            Log.d("","거리설정 디폴트값 추가 성공");
         }else{
-            Log.w("","거리설정 디폴트값 추가 실패");
+            Log.e("","거리설정 디폴트값 추가 실패");
         }
     }
 
@@ -170,9 +166,9 @@ class DataManager extends AsyncTask<String, Integer, String> {
 
         int result = db.update(scopeDBName, values, "Scope_distance=?", new String[]{distance});
         if(result != 1){
-            Log.w("","거리 설정 업데ㅐ이트 실패" );
+            Log.e("","거리 설정 업데이트 실패" );
         }else{
-            Log.i("","거리 설정 업데ㅐ이트 성공" );
+            Log.d("","거리 설정 업데이트 성공" );
         }
         db.close();
     }
@@ -237,7 +233,6 @@ class DataManager extends AsyncTask<String, Integer, String> {
     }
 
     // 주어진 위도 경도로부터 주어진 거리 보다 가까운 주차장들의 리스트만 반환하는 메소드 입니다.
-    // TODO : 이 메소드는 테스트를 해보지 않았습니다. 테스트 후 현재 위치와 거리에 맞는 주차장 리스트가 잘 나오면 이 주석을 지워주세요.
     public static ArrayList<ParkingLot> getParkinglotInRange(LatLng ll, int LimitMeter){
         return getParkinglotInRange(ll.latitude, ll.longitude, LimitMeter);
     }

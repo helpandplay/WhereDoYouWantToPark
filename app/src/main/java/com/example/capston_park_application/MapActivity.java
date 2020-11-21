@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Context;
@@ -16,8 +18,10 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle; //String을 쓰기위함
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -125,7 +129,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         final Animation translateDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_down);
         final Animation translateLeft = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_left);
         final Animation translateRight = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_right);
-        // TODO : 데이터 준비
+
         // ViewDistance = DataMAnager?.getDistance???
         parkinglot_layout = (View)findViewById(R.id.parkinglot_layout);
         option_drawerView = (View)findViewById(R.id.option_drawer);
@@ -133,6 +137,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         favorite_drawerView = (View)findViewById(R.id.favorite_drawer);
         favorite_drawerlayout = (View)findViewById(R.id.favorite_drawer_layout);
         search_layout = (View)findViewById(R.id.relative);
+
+        // 즐겨찾기 리스트 새로고침
+        RefreshFavorite();
+
 
         ///////////////////옵션, 즐겨찾기 클릭시 드로워 이벤트 들///////////////////
         option_open.setOnClickListener(new View.OnClickListener() {
@@ -188,6 +196,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         return true;
                     }
                 });
+
+
+
+
+
             }
         });
         favorite_close.setOnClickListener(new View.OnClickListener() {
@@ -335,6 +348,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if(TextUtils.isEmpty(temp_address_old)){
                     parkinglot_address_new.setText("정보없음");
                 }
+
+                // TODO : 즐겨찾기 아이콘 즐겨찾기 여부에 따라 모양 변경하기
+                // if(isFavorite()) 노란별 설정 / else 회색별 설정
+
+
+                // TODO : 즐겨찾기 아이콘 onClick 이벤트 만들기
+                // if(isFavorite()) 회색별 설정, 즐겨찾기 지우기 / else 노란별 설정, 즐겨찾기 추가하기
+
+
+                // TODO : 길찾기 아이콘 onClick 이벤트 만들기
+                // onClick(){ 카카오네비 연결하기 }
+
+
                 parkinglot_layout.setVisibility(View.VISIBLE);
                 parkinglot_layout.startAnimation(translateUp);
 
@@ -422,5 +448,71 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 mMap.getCameraPosition().target.latitude,
                 mMap.getCameraPosition().target.longitude
         );
+    }
+
+    private void RefreshFavorite(){
+        // 즐겨찾기 리사이클러뷰 세팅
+        RecyclerView rv = (RecyclerView) findViewById(R.id.RecyclerView_Favorite);
+        ArrayList<FavoriteDB> flist = DataManager.ReadFavoriteList();
+
+        RecyclerView recyclerView = findViewById(R.id.RecyclerView_Favorite) ;
+        recyclerView.setLayoutManager(new LinearLayoutManager(this)) ;
+
+        SimpleTextAdapter adapter = new SimpleTextAdapter(flist) ;
+        recyclerView.setAdapter(adapter) ;
+
+
+    }
+}
+
+
+
+
+// 리사이클러뷰 어뎁터
+// 코드참고 : https://recipes4dev.tistory.com/154
+class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolder> {
+
+    private ArrayList<FavoriteDB> mData = null ;
+
+    // 아이템 뷰를 저장하는 뷰홀더 클래스.
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView textView1 ;
+
+        ViewHolder(View itemView) {
+            super(itemView) ;
+
+            // 뷰 객체에 대한 참조. (hold strong reference)
+            textView1 = itemView.findViewById(R.id.RecyclerView_Favorite_Text) ;
+        }
+    }
+
+    // 생성자에서 데이터 리스트 객체를 전달받음.
+    SimpleTextAdapter(ArrayList<FavoriteDB> list) {
+        mData = list ;
+    }
+
+    // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext() ;
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
+
+        View view = inflater.inflate(R.layout.favorite_recyclerview_item, parent, false) ;
+        SimpleTextAdapter.ViewHolder vh = new SimpleTextAdapter.ViewHolder(view) ;
+
+        return vh ;
+    }
+
+    // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
+    @Override
+    public void onBindViewHolder(SimpleTextAdapter.ViewHolder holder, int position) {
+        String text = mData.get(position).parkingID ;
+        holder.textView1.setText(text) ;
+    }
+
+    // getItemCount() - 전체 데이터 갯수 리턴.
+    @Override
+    public int getItemCount() {
+        return mData.size() ;
     }
 }
