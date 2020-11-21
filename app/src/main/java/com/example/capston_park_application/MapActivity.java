@@ -398,7 +398,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     parkinglot_favoriteimage.setImageResource(R.drawable.favorite_bright);
                 }
 
-                // if(isFavorite()) 회색별 설정, 즐겨찾기 지우기 / else 노란별 설정, 즐겨찾기 추가하기
                 final ParkingLot finalPl = pl;
                 parkinglot_favoriteimage.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -667,6 +666,7 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
                     holder.Favorite.setImageResource(R.drawable.favorite_dark);
 
                     DataManager.deleteFavoriteElement((String) holder.Name.getText());
+                    Toast.makeText(ma, "주차장 " + pl.getName_ParkingLot() + " 삭제합니다.\n 즐겨찾기 창을 닫으면 삭제됩니다", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     // 즐겨찾기 해제 상태라면 -> DB에 추가하고 불켠다
@@ -674,6 +674,7 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
                     holder.Favorite.setImageResource(R.drawable.favorite_bright);
 
                     DataManager.insertFavoriteElement(pl.getID_ParkingLot(), pl.getName_ParkingLot());
+                    Toast.makeText(ma, "주차장 " + pl.getName_ParkingLot() + " 삭제하지 않습니다", Toast.LENGTH_SHORT).show();
                 }
             }
         });
