@@ -508,11 +508,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     title(pl.getName_ParkingLot());
             mo.icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(this, marker_root_view))); // 커스텀 핀 아이콘으로 변경
             mMap.addMarker(mo);
-            if(pl.getCost_Oneday().equals("0")) {
+            if(pl.getCost_Basic().equals("0")) {
                 tv_marker.setText("무료");
             }
+            else if(pl.getCost_Basic().isEmpty()){
+                tv_marker.setText("정보없음");
+            }
             else {
-                tv_marker.setText(pl.getCost_Oneday() + "원");
+                tv_marker.setText("기본 요금\n" + pl.getCost_Basic() + "원");
             }
         }
     }
