@@ -5,6 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/loading_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/loadingbackgroundimage"
+        android:scaleType="centerCrop">
+    </ImageView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,7 +24,12 @@
             android:id="@+id/Loading_TextView_PrintLog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="대기중 . . " />
+            android:layout_gravity="center"
+            android:layout_marginTop="400dp"
+            android:text="대기중 . . ."
+            android:textColor="#E4E4E4"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
 
     </LinearLayout>
 
