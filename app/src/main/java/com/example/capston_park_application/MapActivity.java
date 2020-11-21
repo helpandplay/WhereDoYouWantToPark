@@ -376,6 +376,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     public void onClick(View v) {   //주차장 디테일 버튼 close 클릭시
                         parkinglot_layout.setVisibility(View.INVISIBLE);
                         parkinglot_layout.startAnimation(translateDown);
+
+                        // 닫으면 즐겨찾기 리스트 갱신
+                        RefreshFavorite();
                     }
                 });
                 return false;
@@ -491,7 +494,7 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
             super(itemView) ;
 
             // 뷰 객체에 대한 참조. (hold strong reference)
-            textView1 = itemView.findViewById(R.id.RecyclerView_Favorite_Text) ;
+            textView1 = itemView.findViewById(R.id.RecyclerView_Favorite_ParkinglotName) ;
         }
 
     }
