@@ -149,7 +149,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         option_open.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //옵션 버튼 open 클릭시 옵션창을 제외한 모든 창 안보이게
+                //옵션 버튼 open 클릭시 옵션창을 제외한 모든 창 안보이게 설정
                 option_drawerView.bringToFront();
                 option_drawerView.setVisibility(View.VISIBLE);
                 search_layout.setVisibility(View.INVISIBLE);
