@@ -368,150 +368,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(16));
 
-        final Animation translateUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_up);
-        final Animation translateDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_down);
-
-        final TextView parkinglot_name = findViewById(R.id.parkinglot_name);
-        final TextView parkinglot_address_new = findViewById(R.id.parkinglot_address_new);
-        final TextView parkinglot_address_old = findViewById(R.id.parkinglot_address_old);
-        final TextView parkinglot_weekly = findViewById(R.id.parkinglot_weekly);
-        final TextView parkinglot_sat = findViewById(R.id.parkinglot_sat);
-        final TextView parkinglot_weekend = findViewById(R.id.parkinglot_weekend);
-        final TextView parkinglot_weekly_time = findViewById(R.id.parkinglot_weekly_time);
-        final TextView parkinglot_weekly_time_close = findViewById(R.id.parkinglot_weekly_time_close);
-        final TextView parkinglot_sat_time = findViewById(R.id.parkinglot_sat_time);
-        final TextView parkinglot_sat_time_close = findViewById(R.id.parkinglot_sat_time_close);
-        final TextView parkinglot_weekend_time = findViewById(R.id.parkinglot_weekend_time);
-        final TextView parkinglot_weekend_time_close = findViewById(R.id.parkinglot_weekend_time_close);
-        final TextView parkinglot_capacity = findViewById(R.id.parkinglot_capacity);
-        final ImageView parkinglot_favoriteimage = findViewById(R.id.parkignlot_favorite_button);
-        final ImageButton parkinglot_P_Button = findViewById(R.id.goto_kakaomap);
-
-        final Button closebutton = findViewById(R.id.tableclose);
-
         ///////////////////마커 클릭시 이벤트처리///////////////////
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                // 마커의 이름(주차장 이름)을 가져오고
-                String title = marker.getTitle();
-                // 주차장 객체 하나 만들고
-                ParkingLot pl = null;
-                // 무식하게 for문돌려서 리스트에서 주차장 이름으로 주차장 객체를 찾는다.
-                for(ParkingLot t : DataManager.List_ParkingLot){
-                    if(t.getName_ParkingLot().equals(title)){
-                        pl = t;
-                        break;
-                    }
-                }
-                // 정보 넣기, 예외설정 필요
-
-                ////////임시로 만듬/////////
-                String operate_days = pl.getOperate_Days();
-                if(operate_days.contains("평일")){
-                    parkinglot_weekly.setText("평일");
-                    parkinglot_weekly_time.setText(pl.getTime_Open_Weekly());
-                    parkinglot_weekly_time_close.setText("~  " + pl.getTime_Close_Weekly());
-                    if(TextUtils.isEmpty(pl.getTime_Close_Weekly())){
-                        parkinglot_weekly_time_close.setText("~");
-                    }
-                }
-
-                if(operate_days.contains("토요일")){
-                    parkinglot_sat.setText("토요일");
-                    parkinglot_sat_time.setText(pl.getTime_Open_Sat());
-                    parkinglot_sat_time_close.setText("~  " + pl.getTime_Close_Sat());
-                }
-
-                if(operate_days.contains("공휴일")){
-                    parkinglot_weekend.setText("공휴일");
-                    parkinglot_weekend_time.setText(pl.getTime_Open_Weekend());
-                    parkinglot_weekend_time_close.setText("~  " + pl.getTime_Close_Weekend());
-                }
-
-                parkinglot_name.setText(pl.getName_ParkingLot());
-                parkinglot_address_old.setText(pl.getAddress_old());
-                parkinglot_address_new.setText(pl.getAddress_new());
-                parkinglot_capacity.setText(pl.getCapacity());
-
-                String temp_address_new = pl.getAddress_new();
-                String temp_address_old = pl.getAddress_old();
-
-                //신주소 정보 없을때
-                if(TextUtils.isEmpty(temp_address_new)){
-                    parkinglot_address_new.setText("정보없음");
-                }
-                //구주소 정보 없을때
-                if(TextUtils.isEmpty(temp_address_old)){
-                    parkinglot_address_new.setText("정보없음");
-                }
-
-                // 주차장 상세정보의 즐겨찾기 아이콘 관련 처리
-                if(!DataManager.isFavorite(pl.getID_ParkingLot())){
-                    parkinglot_favoriteimage.setImageResource(R.drawable.unfavorite);
-                }
-                else{
-                    parkinglot_favoriteimage.setImageResource(R.drawable.favorite_bright);
-                }
-
-                final ParkingLot finalPl = pl;
-                parkinglot_favoriteimage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // 즐겨찾기가 아닌 경우
-                        if(!DataManager.isFavorite(finalPl.getID_ParkingLot())){
-                            // DB에 즐겨찾기 추가
-                            DataManager.insertFavoriteElement(finalPl.getID_ParkingLot(), finalPl.getName_ParkingLot());
-                            // 별을 빛나게
-                            parkinglot_favoriteimage.setImageResource(R.drawable.favorite_bright);
-                            Toast.makeText(MapActivity.this, "주차장 " + finalPl.getName_ParkingLot() + " 을 즐겨찾기에 추가하였습니다", Toast.LENGTH_LONG).show();
-
-                        }
-                        // 즐겨찾기인 경우
-                        else{
-                            // DB에서 제거
-                            DataManager.deleteFavoriteElement(finalPl.getName_ParkingLot());
-                            // 별 불끄기
-                            parkinglot_favoriteimage.setImageResource(R.drawable.unfavorite);
-                            Toast.makeText(MapActivity.this, "주차장 " + finalPl.getName_ParkingLot() + "을  즐겨찾기에서 삭제하였습니다", Toast.LENGTH_LONG).show();
-                        }
-
-                    }
-                });
-
-                parkinglot_P_Button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {   //주차장 디테일 버튼 close 클릭시
-                        // TODO : 길찾기 아이콘(주차장 상세 정보 열리면 즐겨찾기 별 옆에 있는 하얀 동그라미에 검은색 P) onClick 이벤트 만들기
-                        String latitude = finalPl.getLatitude();
-                        String longittude = finalPl.getLongittude();
-                        String goal = finalPl.getName_ParkingLot();
-                        //바로 kakaonavi 연결,
-                        KakaoSdk.init(getApplicationContext(), "10be2992b503fbe5718496039f7ddace");
-                        KakaoNaviParams kakaoNaviParams;
-                        Uri uri = NaviClient.getInstance().navigateWebUrl(
-                                new com.kakao.sdk.navi.model.Location(goal, longittude, latitude),
-                                new NaviOption(CoordType.WGS84)
-                        );
-                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                        startActivity(intent);
-                    }
-                });
-
-
-                parkinglot_layout.setVisibility(View.VISIBLE);
-                parkinglot_layout.startAnimation(translateUp);
-
-                closebutton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {   //주차장 디테일 버튼 close 클릭시
-                        parkinglot_layout.setVisibility(View.INVISIBLE);
-                        parkinglot_layout.startAnimation(translateDown);
-
-                        // 닫으면 즐겨찾기 리스트 갱신
-                        RefreshFavorite();
-                    }
-                });
+                openParkinglotDetailInfo(marker.getTitle());
                 return false;
             }
         });
@@ -649,6 +510,155 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(
                 Double.parseDouble(pl.getLatitude()),
                 Double.parseDouble(pl.getLongittude()))));
+
+        // 상세정보 열기
+        openParkinglotDetailInfo(pl.getName_ParkingLot());
+    }
+
+    // P_Name의 주차장 이름을 가진 주차장 상세정보 창 열기
+    private void openParkinglotDetailInfo(String P_Name){
+
+        final Animation translateUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_up);
+        final Animation translateDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_down);
+
+        final TextView parkinglot_name = findViewById(R.id.parkinglot_name);
+        final TextView parkinglot_address_new = findViewById(R.id.parkinglot_address_new);
+        final TextView parkinglot_address_old = findViewById(R.id.parkinglot_address_old);
+        final TextView parkinglot_weekly = findViewById(R.id.parkinglot_weekly);
+        final TextView parkinglot_sat = findViewById(R.id.parkinglot_sat);
+        final TextView parkinglot_weekend = findViewById(R.id.parkinglot_weekend);
+        final TextView parkinglot_weekly_time = findViewById(R.id.parkinglot_weekly_time);
+        final TextView parkinglot_weekly_time_close = findViewById(R.id.parkinglot_weekly_time_close);
+        final TextView parkinglot_sat_time = findViewById(R.id.parkinglot_sat_time);
+        final TextView parkinglot_sat_time_close = findViewById(R.id.parkinglot_sat_time_close);
+        final TextView parkinglot_weekend_time = findViewById(R.id.parkinglot_weekend_time);
+        final TextView parkinglot_weekend_time_close = findViewById(R.id.parkinglot_weekend_time_close);
+        final TextView parkinglot_capacity = findViewById(R.id.parkinglot_capacity);
+        final ImageView parkinglot_favoriteimage = findViewById(R.id.parkignlot_favorite_button);
+        final ImageButton parkinglot_P_Button = findViewById(R.id.goto_kakaomap);
+
+        final Button closebutton = findViewById(R.id.tableclose);
+
+
+        // 마커의 이름(주차장 이름)을 가져오고
+        // 주차장 객체 하나 만들고
+        ParkingLot pl = null;
+        // 무식하게 for문돌려서 리스트에서 주차장 이름으로 주차장 객체를 찾는다.
+        for(ParkingLot t : DataManager.List_ParkingLot){
+            if(t.getName_ParkingLot().equals(P_Name)){
+                pl = t;
+                break;
+            }
+        }
+        // 정보 넣기, 예외설정 필요
+
+        ////////임시로 만듬/////////
+        String operate_days = pl.getOperate_Days();
+        if(operate_days.contains("평일")){
+            parkinglot_weekly.setText("평일");
+            parkinglot_weekly_time.setText(pl.getTime_Open_Weekly());
+            parkinglot_weekly_time_close.setText("~  " + pl.getTime_Close_Weekly());
+            if(TextUtils.isEmpty(pl.getTime_Close_Weekly())){
+                parkinglot_weekly_time_close.setText("~");
+            }
+        }
+
+        if(operate_days.contains("토요일")){
+            parkinglot_sat.setText("토요일");
+            parkinglot_sat_time.setText(pl.getTime_Open_Sat());
+            parkinglot_sat_time_close.setText("~  " + pl.getTime_Close_Sat());
+        }
+
+        if(operate_days.contains("공휴일")){
+            parkinglot_weekend.setText("공휴일");
+            parkinglot_weekend_time.setText(pl.getTime_Open_Weekend());
+            parkinglot_weekend_time_close.setText("~  " + pl.getTime_Close_Weekend());
+        }
+
+        parkinglot_name.setText(pl.getName_ParkingLot());
+        parkinglot_address_old.setText(pl.getAddress_old());
+        parkinglot_address_new.setText(pl.getAddress_new());
+        parkinglot_capacity.setText(pl.getCapacity());
+
+        String temp_address_new = pl.getAddress_new();
+        String temp_address_old = pl.getAddress_old();
+
+        //신주소 정보 없을때
+        if(TextUtils.isEmpty(temp_address_new)){
+            parkinglot_address_new.setText("정보없음");
+        }
+        //구주소 정보 없을때
+        if(TextUtils.isEmpty(temp_address_old)){
+            parkinglot_address_new.setText("정보없음");
+        }
+
+        // 주차장 상세정보의 즐겨찾기 아이콘 관련 처리
+        if(!DataManager.isFavorite(pl.getID_ParkingLot())){
+            parkinglot_favoriteimage.setImageResource(R.drawable.unfavorite);
+        }
+        else{
+            parkinglot_favoriteimage.setImageResource(R.drawable.favorite_bright);
+        }
+
+        final ParkingLot finalPl = pl;
+        parkinglot_favoriteimage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 즐겨찾기가 아닌 경우
+                if(!DataManager.isFavorite(finalPl.getID_ParkingLot())){
+                    // DB에 즐겨찾기 추가
+                    DataManager.insertFavoriteElement(finalPl.getID_ParkingLot(), finalPl.getName_ParkingLot());
+                    // 별을 빛나게
+                    parkinglot_favoriteimage.setImageResource(R.drawable.favorite_bright);
+                    Toast.makeText(MapActivity.this, "주차장 " + finalPl.getName_ParkingLot() + " 을 즐겨찾기에 추가하였습니다", Toast.LENGTH_LONG).show();
+
+                }
+                // 즐겨찾기인 경우
+                else{
+                    // DB에서 제거
+                    DataManager.deleteFavoriteElement(finalPl.getName_ParkingLot());
+                    // 별 불끄기
+                    parkinglot_favoriteimage.setImageResource(R.drawable.unfavorite);
+                    Toast.makeText(MapActivity.this, "주차장 " + finalPl.getName_ParkingLot() + "을  즐겨찾기에서 삭제하였습니다", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+
+        parkinglot_P_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {   //주차장 디테일 버튼 close 클릭시
+                // TODO : 길찾기 아이콘(주차장 상세 정보 열리면 즐겨찾기 별 옆에 있는 하얀 동그라미에 검은색 P) onClick 이벤트 만들기
+                // 카카오 내비 연결했는데, 오류코드없이 실행화면에서 넘어가지 않음. 원인을 모르겠음.
+                String latitude = finalPl.getLatitude();
+                String longittude = finalPl.getLongittude();
+                String goal = finalPl.getName_ParkingLot();
+                //바로 kakaonavi 연결,
+                KakaoSdk.init(getApplicationContext(), "10be2992b503fbe5718496039f7ddace");
+                KakaoNaviParams kakaoNaviParams;
+                Uri uri = NaviClient.getInstance().navigateWebUrl(
+                        new com.kakao.sdk.navi.model.Location(goal, longittude, latitude),
+                        new NaviOption(CoordType.WGS84)
+                );
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
+
+
+        parkinglot_layout.setVisibility(View.VISIBLE);
+        parkinglot_layout.startAnimation(translateUp);
+
+        closebutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {   //주차장 디테일 버튼 close 클릭시
+                parkinglot_layout.setVisibility(View.INVISIBLE);
+                parkinglot_layout.startAnimation(translateDown);
+
+                // 닫으면 즐겨찾기 리스트 갱신
+                RefreshFavorite();
+            }
+        });
     }
 
 }

@@ -180,6 +180,7 @@ class DataManager extends AsyncTask<String, Integer, String> {
         db.execSQL(ScopeDBSQL.DATA_UPDATE(dis));
         String dist = DataManager.ReadSearchScope();
         Log.d("DataManager","거리값 : " + dist);
+        //아래 주석 지우지 마세요.
 //        int result = db.update(scopeDBName, values, "Scope_distance=?", new String[]{dis});
 //        if(result != 1){
 //            Log.e("DataManager","UpdateSearchScope : 거리 설정 업데이트 실패" );
@@ -493,7 +494,18 @@ class FireBase {
                                 ParkingLot data = ss.getValue(ParkingLot.class);
                                 // 데이터가 문제가 없다면 ArrayList에 넣습니다.
                                 if(!data.hasMissingData())
-                                    Result.add(data);
+                                {
+                                    // 중복 주차장 제거
+                                    boolean flag = true;
+                                    for(ParkingLot pl : Result){
+                                        if(pl.getID_ParkingLot().equals(data.getID_ParkingLot())){
+                                            flag = false;
+                                            break;
+                                        }
+                                    }
+                                    if(flag) Result.add(data);
+
+                                }
                             } catch (Exception e) {
                                 // 예외가 발생하면 로그와 스택트레이스를 띄웁니다.
                                 Log.e("", "예외 발생 (인덱스 : " + i + " )");

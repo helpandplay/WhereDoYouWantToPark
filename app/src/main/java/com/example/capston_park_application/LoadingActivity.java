@@ -2,6 +2,7 @@ package com.example.capston_park_application;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -58,8 +59,9 @@ public class LoadingActivity extends AppCompatActivity {
     // DataManager 객체의 초기화가 완료되었을 때 호출되는 메소드
     public void Init_OK(){
         TextView PrintingLog = (TextView) findViewById(R.id.Loading_TextView_PrintLog);
-        String message = "주차장 갯수 : " + DataManager.List_ParkingLot.size() + "\n"
-                + "isinit : " + DataManager.isInit();
+        // String message = "주차장 갯수 : " + DataManager.List_ParkingLot.size() + "\n"+ "isinit : " + DataManager.isInit();
+        Log.i("", "총 " + DataManager.List_ParkingLot.size() + " 개의 주차장 데이터 로드됨");
+        String message = "로딩 완료!";
         PrintingLog.setText(message);
 
         // 로딩이 완료되면 Map Activity로 이동
