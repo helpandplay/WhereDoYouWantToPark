@@ -27,7 +27,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:background="@drawable/button_background"
-                app:srcCompat="@drawable/option_close_btn_image" />
+                app:srcCompat="@drawable/option_close_btn_image"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -47,8 +47,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15sp"
-                        android:layout_marginRight="10sp"
-                        android:gravity="center"
+                        android:layout_marginRight="24sp"
+                        android:gravity="center_horizontal"
                         android:textStyle="bold"
                         android:textSize="21sp"
                         android:textColor="#222222"
@@ -71,7 +71,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="4"
-                            android:gravity="center"
+                            android:gravity="center_horizontal"
                             android:text="거리"
                             android:textColor="#222222"
                             android:textSize="15sp" />
@@ -81,6 +81,7 @@
                             android:layout_width="40sp"
                             android:layout_height="35sp"
                             android:layout_weight="1"
+                            android:layout_marginRight="24sp"
                             android:text=" + " />
                     </LinearLayout>
                 </LinearLayout>
@@ -90,6 +91,7 @@
                     android:id="@+id/TextView_Option_Info01"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="25sp"
                     android:gravity="bottom|center"
                     android:paddingRight="5sp"
                     android:text="@string/Info01"
@@ -100,6 +102,7 @@
                     android:id="@+id/TextView_Option_Info02"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="25sp"
                     android:gravity="bottom|center"
                     android:paddingRight="5sp"
                     android:paddingBottom="8sp"

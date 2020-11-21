@@ -7,24 +7,34 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/parkignlot_unfavorite_button"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_above="@id/parkinglot_layout_image"
         android:layout_toLeftOf="@id/goto_kakaomap"
         android:layout_marginRight="7dp"
         android:layout_marginBottom="-43dp"
+        android:background="@drawable/button_background"
+        android:elevation="10dp"/>
+
+    <ImageView
+        android:id="@+id/parkignlot_unfavorite_button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_above="@id/parkinglot_layout_image"
+        android:layout_toLeftOf="@id/goto_kakaomap"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="-37dp"
         android:elevation="10dp"
         app:srcCompat="@drawable/unfavorite"/>
 
     <ImageView
         android:id="@+id/parkignlot_favorite_button"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_above="@id/parkinglot_layout_image"
         android:layout_toLeftOf="@id/goto_kakaomap"
-        android:layout_marginRight="7dp"
-        android:layout_marginBottom="-43dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="-37dp"
         android:elevation="10dp"
         app:srcCompat="@drawable/favorite_bright"/>
 
@@ -80,11 +90,12 @@
         android:layout_below="@id/parkinglot_name"
         android:background="@drawable/button_background"
         app:srcCompat="@drawable/location" />
+
     <ImageButton
         android:id="@+id/time"
         android:layout_width="30sp"
         android:layout_height="30sp"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="25dp"
         android:layout_marginLeft="10sp"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/location"
@@ -95,7 +106,7 @@
         android:id="@+id/parkinglot_capacity_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="115dp"
+        android:layout_marginTop="121dp"
         android:layout_marginLeft="40dp"
         android:layout_toRightOf="@id/parkinglot_time_text"
         app:srcCompat="@drawable/parkinglot_capacity" />
@@ -139,7 +150,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="114dp"
+        android:layout_marginTop="121dp"
         android:layout_toRightOf="@+id/parkinglot_capacity_image"
         android:text="자리수"
         android:textSize="20dp"
@@ -151,7 +162,7 @@
         android:id="@+id/parkinglot_time_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="68dp"
         android:layout_marginLeft="5sp"
         android:layout_toRightOf="@+id/time"
         android:layout_below="@+id/parkinglot_name"

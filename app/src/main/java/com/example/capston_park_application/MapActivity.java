@@ -11,11 +11,15 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle; //String을 쓰기위함
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,7 +27,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
@@ -41,6 +47,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -55,6 +62,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     Button favorite_close;
     RecyclerView Favorite_RecyclerView;
 
+    Marker selectedMarker;
+    View marker_root_view;
+    TextView tv_marker;
+
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
     private int ViewDistance = 2500;
@@ -65,6 +76,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         context_MainScreen = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
         final ImageButton mylocation = (ImageButton)findViewById(R.id.mylocation);
         zoomin = findViewById(R.id.zoomin);
         zoomout = findViewById(R.id.zoomout);
@@ -82,7 +94,28 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         ViewDistance = Integer.parseInt(DataManager.ReadSearchScope());
 
         //주소 검색기능
+        final InputMethodManager tmpkeyboard = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         searchview = findViewById(R.id.searchBar);
+        //EditText searchEditText = searchview.findViewById(androidx.appcompat.R.id.search);
+        int searchIcon = searchview.getContext().getResources().getIdentifier("android:id/search_mag_icon", null, null);
+        int textcolor = searchview.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+        int searchclose = searchview.getContext().getResources().getIdentifier("android:id/search_close_btn", null, null);
+        TextView searchtext = searchview.findViewById(textcolor);
+        ImageView magIcon = searchview.findViewById(searchIcon);
+        ImageView cls_btn = searchview.findViewById(searchclose);
+        magIcon.setColorFilter(Color.BLACK);
+        cls_btn.setColorFilter(Color.BLACK);
+        searchtext.setTextColor(Color.BLACK);
+        searchtext.setTextSize(17);
+        searchtext.setHint("주소를 검색해주세요!");
+        searchtext.setHintTextColor(Color.GRAY);
+        searchview.setFocusable(false);
+        searchview.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                searchview.onActionViewExpanded();
+            }
+        });
         searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -100,11 +133,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         if(addressList.size()==0) { //주소 검색을 잘못해 geocoder로 부터 값을 전달받지 못했을경우 ex) seoul 이 아닌 soeul 등
                             Toast locationToast = Toast.makeText(getApplicationContext(), "해당 주소는 존재하지 않습니다", Toast.LENGTH_SHORT);
                             locationToast.show();
+                            searchview.setQuery("", false);
+                            searchview.clearFocus();
                         }
                         else { //정상적인 주소검색으로 geocoder로 부터 값을 받을경우
                             address = addressList.get(0);
                             LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,16));//숫자값 높으면 줌인 낮으면 줌아웃 1~21
+                            searchview.setQuery("", false);
+                            searchview.clearFocus();
                         }
                     }
                 }
@@ -113,6 +150,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
+            }
+        });
+        cls_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tmpkeyboard.hideSoftInputFromWindow(searchview.getWindowToken(), 0);
+                searchview.setQuery("", false);
+                searchview.clearFocus();
             }
         });
         //카메라 줌인 줌아웃//
@@ -175,11 +220,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 Btn_add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v){
-                        if(ViewDistance >= 20000){
+                        if(ViewDistance >= 5000){
                             Toast.makeText(MapActivity.this, "더 이상 거리를 늘릴 수 없습니다.", Toast.LENGTH_SHORT).show();
                         }
                         else{
-                            ViewDistance += 100;
+                            ViewDistance += 200;
                             tv.setText(ViewDistance + "m");
                             DataManager.UpdateSearchScope(ViewDistance);
                             LatLng mPosition = mMap.getCameraPosition().target;
@@ -190,19 +235,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 Btn_dec.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v){
-                        if(ViewDistance <= 100){
+                        if(ViewDistance <= 200){
                             Toast.makeText(MapActivity.this, "더 이상 거리를 줄일 수 없습니다.", Toast.LENGTH_SHORT).show();
                             LatLng mPosition = mMap.getCameraPosition().target;
                             MarkerGenerator(DataManager.getParkinglotInRange(mPosition, ViewDistance));
                         }
                         else{
-                            ViewDistance -= 100;
+                            ViewDistance -= 200;
                             tv.setText(ViewDistance + "m");
                             DataManager.UpdateSearchScope(ViewDistance);
                         }
                     }});
-
-
             }
         });
         option_close.setOnClickListener(new View.OnClickListener() {
@@ -302,6 +345,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 MarkerGenerator(DataManager.getParkinglotInRange(mPosition, ViewDistance));
             }
         });
+
+        setCustomMarkerView();
+    }
+    private void setCustomMarkerView() {
+        marker_root_view = LayoutInflater.from(this).inflate(R.layout.marker_layout, null);
+        tv_marker = marker_root_view.findViewById(R.id.tv_marker);
     }
 
     // 마커 클릭 이벤트 추가
@@ -392,13 +441,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                 // 주차장 상세정보의 즐겨찾기 아이콘 관련 처리
                 if(!DataManager.isFavorite(pl.getID_ParkingLot())){
-                    parkinglot_favoriteimage.setImageResource(R.drawable.favorite_dark);
+                    parkinglot_favoriteimage.setImageResource(R.drawable.unfavorite);
                 }
                 else{
                     parkinglot_favoriteimage.setImageResource(R.drawable.favorite_bright);
                 }
 
-                // if(isFavorite()) 회색별 설정, 즐겨찾기 지우기 / else 노란별 설정, 즐겨찾기 추가하기
                 final ParkingLot finalPl = pl;
                 parkinglot_favoriteimage.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -417,7 +465,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             // DB에서 제거
                             DataManager.deleteFavoriteElement(finalPl.getName_ParkingLot());
                             // 별 불끄기
-                            parkinglot_favoriteimage.setImageResource(R.drawable.favorite_dark);
+                            parkinglot_favoriteimage.setImageResource(R.drawable.unfavorite);
                             Toast.makeText(MapActivity.this, "주차장 " + finalPl.getName_ParkingLot() + "을  즐겨찾기에서 삭제하였습니다", Toast.LENGTH_LONG).show();
                         }
 
@@ -458,9 +506,31 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     Double.parseDouble(pl.getLatitude()),
                     Double.parseDouble(pl.getLongittude()))).
                     title(pl.getName_ParkingLot());
+            mo.icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(this, marker_root_view))); // 커스텀 핀 아이콘으로 변경
             mMap.addMarker(mo);
+            if(pl.getCost_Oneday().equals("0")) {
+                tv_marker.setText("무료");
+            }
+            else {
+                tv_marker.setText(pl.getCost_Oneday() + "원");
+            }
         }
     }
+
+    // 커스텀핀 설정
+    private Bitmap createDrawableFromView(Context context, View view) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        view.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
+        view.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
+        view.buildDrawingCache();
+        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        return bitmap;
+    }
+
     // 위치정보 권한 받기
     private void getLocationPermission() {
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
@@ -562,9 +632,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 }
 
-
-
-
 // 리사이클러뷰 어뎁터
 // 코드참고 : https://recipes4dev.tistory.com/154
 class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolder> {
@@ -664,9 +731,10 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
                 if(holder.FavoriteFlag){
                     // 즐겨찾기 상태라면 -> DB에서 지우고 불끈다
                     holder.FavoriteFlag = false;
-                    holder.Favorite.setImageResource(R.drawable.favorite_dark);
+                    holder.Favorite.setImageResource(R.drawable.unfavorite);
 
                     DataManager.deleteFavoriteElement((String) holder.Name.getText());
+                    Toast.makeText(ma, "주차장 " + pl.getName_ParkingLot() + " 삭제합니다.\n 즐겨찾기 창을 닫으면 삭제됩니다", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     // 즐겨찾기 해제 상태라면 -> DB에 추가하고 불켠다
@@ -674,6 +742,7 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
                     holder.Favorite.setImageResource(R.drawable.favorite_bright);
 
                     DataManager.insertFavoriteElement(pl.getID_ParkingLot(), pl.getName_ParkingLot());
+                    Toast.makeText(ma, "주차장 " + pl.getName_ParkingLot() + " 삭제하지 않습니다", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -697,7 +766,6 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
     }
 
     private void DeleteParkingLotData(){
-
 
 
     }

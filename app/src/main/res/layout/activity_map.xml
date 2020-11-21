@@ -42,8 +42,7 @@
             android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:background="#000000"
-            android:tooltipText="start">
+            android:iconifiedByDefault="false">
         </SearchView>
 
         <!--옵션버튼-->
@@ -69,18 +68,18 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginTop="9dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="3dp"
             android:layout_toStartOf="@id/searchBar"
             android:background="#00000000"
-            android:elevation="50dp"
-            app:srcCompat="@drawable/favorite_bright" />
+            android:elevation="10dp"
+            app:srcCompat="@drawable/search_favorite"/>
     </RelativeLayout>
 
     <ImageButton
         android:id="@+id/mylocation"
         android:layout_width="30sp"
         android:layout_height="30sp"
-        android:layout_marginLeft="16sp"
+        android:layout_marginLeft="20sp"
         android:layout_marginTop="16sp"
         android:elevation="10sp"
         android:background="@drawable/button_background"
@@ -92,7 +91,7 @@
         android:id="@+id/zoomin"
         android:layout_width="30sp"
         android:layout_height="30sp"
-        android:layout_marginRight="16sp"
+        android:layout_marginRight="20sp"
         android:layout_marginTop="16sp"
         android:elevation="10sp"
         android:background="@drawable/button_background"
@@ -104,7 +103,7 @@
         android:id="@+id/zoomout"
         android:layout_width="30sp"
         android:layout_height="30sp"
-        android:layout_marginRight="16sp"
+        android:layout_marginRight="20sp"
         android:layout_marginTop="16sp"
         android:elevation="10sp"
         android:background="@drawable/button_background"
