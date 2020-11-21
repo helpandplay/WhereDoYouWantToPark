@@ -116,7 +116,7 @@
                 android:layout_height="40sp"
                 android:layout_margin="4sp"
                 android:background="@drawable/button_background"
-                android:src="@drawable/find_location" />
+                android:src="@drawable/location" />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

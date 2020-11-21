@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -491,12 +492,35 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Favorite_RecyclerView.setLayoutManager(new LinearLayoutManager(this)) ;
 
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
-        SimpleTextAdapter adapter = new SimpleTextAdapter(flist) ;
+        SimpleTextAdapter adapter = new SimpleTextAdapter(flist, null, this) ;
         Favorite_RecyclerView.setAdapter(adapter) ;
         Log.d("RefreshFavorite", "어뎁터 아이템 카운트 : " + adapter.getItemCount());
 
 
     }
+
+    // 즐겨찾기 드로워 닫고 선택한 주차장 위치로 이동하는 메소드
+    // 너무 위험한 코드
+    public void closeFavoriteDrawer(ParkingLot pl){
+        final Animation translateRight = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_right);
+        final ImageButton mylocation = (ImageButton)findViewById(R.id.mylocation);
+
+        //즐겨찾기기 버튼 close 클릭시 안보던 창 보이게
+        favorite_drawerView.setVisibility(View.GONE);
+        search_layout.setVisibility(View.VISIBLE);
+        mylocation.setVisibility(View.VISIBLE);
+        zoomin.setVisibility(View.VISIBLE);
+        zoomout.setVisibility(View.VISIBLE);
+        favorite_drawerView.startAnimation(translateRight);
+
+        // 카메라 이동하기
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(
+                Double.parseDouble(pl.getLatitude()),
+                Double.parseDouble(pl.getLongittude()))));
+
+
+    }
+
 }
 
 
@@ -507,6 +531,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolder> {
 
     private ArrayList<ParkingLot> mData = null ;
+    private Activity fa;
+    private MapActivity ma;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -532,8 +558,11 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
     }
 
     // 생성자에서 데이터 리스트 객체를 전달받음.
-    SimpleTextAdapter(ArrayList<FavoriteDB> list)
+    SimpleTextAdapter(ArrayList<FavoriteDB> list, Activity a, MapActivity ma)
     {
+        this.ma = ma;
+        fa = a;
+
         mData = new ArrayList<ParkingLot>();
         for(FavoriteDB f_data : list){
             ParkingLot pl = DataManager.getParkingLotbyID(f_data.parkingID);
@@ -605,6 +634,16 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
 
                     DataManager.insertFavoriteElement(pl.getID_ParkingLot(), pl.getName_ParkingLot());
                 }
+            }
+        });
+
+        holder.Guide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 내 위치 아이콘 눌렀을 때 실행할 이벤트
+                ParkingLot pl = DataManager.getParkingLotbyName((String) holder.Name.getText());
+                ma.closeFavoriteDrawer(pl);
+
             }
         });
 
