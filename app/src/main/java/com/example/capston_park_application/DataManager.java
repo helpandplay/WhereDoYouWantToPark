@@ -169,25 +169,27 @@ class DataManager extends AsyncTask<String, Integer, String> {
 
     //지도 설정값 바꾸기
     //ex . DataManager.UpdateSearchScope("설정한거리");
-    public static void UpdateSearchScope(String distance){
+    public static void UpdateSearchScope(int distance){
+        String dis = Integer.toString(distance);
         ScopeDBHelper = new ParkingLotDBHelper(nowContext, scopeDBName);
         db =  ScopeDBHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("Scope_distance", distance);
+        values.put("Scope_distance", dis);
 
-        int result = db.update(scopeDBName, values, "Scope_distance=?", new String[]{distance});
-        if(result != 1){
-            Log.e("DataManager","UpdateSearchScope : 거리 설정 업데이트 실패" );
-            Log.e("DataManager","거리값 : " + distance);
-        }else{
-            Log.d("DataManager","거리 설정 업데이트 성공" );
-        }
+
+        db.execSQL(ScopeDBSQL.DATA_UPDATE(dis));
+        String dist = DataManager.ReadSearchScope();
+        Log.d("DataManager","거리값 : " + dist);
+//        int result = db.update(scopeDBName, values, "Scope_distance=?", new String[]{dis});
+//        if(result != 1){
+//            Log.e("DataManager","UpdateSearchScope : 거리 설정 업데이트 실패" );
+//            String dist = DataManager.ReadSearchScope();
+//            Log.e("DataManager","거리값 : " + dist);
+//        }else{
+//            Log.d("DataManager","거리 설정 업데이트 성공" );
+//        }
         db.close();
     }
-    public static void UpdateSearchScope(int distance){
-        UpdateSearchScope(Integer.toString(distance));
-    }
-
 
     public static FireBaseStatus Init_CheckFirebase(boolean doPrintDebug){
         FireBaseStatus res = null;

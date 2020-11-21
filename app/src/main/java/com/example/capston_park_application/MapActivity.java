@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -17,6 +18,7 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle; //String을 쓰기위함
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -53,6 +55,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.kakao.sdk.common.KakaoSdk;
+import com.kakao.sdk.navi.NaviClient;
+import com.kakao.sdk.navi.model.CoordType;
+import com.kakao.sdk.navi.model.KakaoNaviParams;
+import com.kakao.sdk.navi.model.NaviOption;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
     public static Context context_MainScreen;
@@ -476,7 +483,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     @Override
                     public void onClick(View v) {   //주차장 디테일 버튼 close 클릭시
                         // TODO : 길찾기 아이콘(주차장 상세 정보 열리면 즐겨찾기 별 옆에 있는 하얀 동그라미에 검은색 P) onClick 이벤트 만들기
-
+                        String latitude = finalPl.getLatitude();
+                        String longittude = finalPl.getLongittude();
+                        String goal = finalPl.getName_ParkingLot();
+                        //바로 kakaonavi 연결,
+                        KakaoSdk.init(getApplicationContext(), "10be2992b503fbe5718496039f7ddace");
+                        KakaoNaviParams kakaoNaviParams;
+                        Uri uri = NaviClient.getInstance().navigateWebUrl(
+                                new com.kakao.sdk.navi.model.Location(goal, longittude, latitude),
+                                new NaviOption(CoordType.WGS84)
+                        );
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
                     }
                 });
 

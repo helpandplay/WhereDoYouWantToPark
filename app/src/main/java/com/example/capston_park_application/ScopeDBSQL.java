@@ -15,8 +15,8 @@ public class ScopeDBSQL{
     public static String DATA_READ = "SELECT * FROM " + TBL_NAME;
     public static String DATA_INSERT = "INSERT INTO " + TBL_NAME + " " +
             "(" + COL_distance +") VALUES ";
-    public static String DATA_UPDATE(int distance){
-        return "UPDATE " + TBL_NAME + " SET " + COL_distance + "=" + distance + " WHERE " + "= 1";
+    public static String DATA_UPDATE(String distance){
+        return "UPDATE " + TBL_NAME + " SET " + COL_distance + "=" + distance + " WHERE "+COL_NO + "= 1";
     }
     public static String DROP_TBL = "DROP TABLE IF EXISTS " + TBL_NAME ;
 }

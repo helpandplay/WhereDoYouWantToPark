@@ -16,13 +16,13 @@ import com.kakao.sdk.navi.model.KakaoNaviParams;
 import com.kakao.sdk.navi.model.Location;
 import com.kakao.sdk.navi.model.NaviOption;
 
-public class navigation_test extends AppCompatActivity {
+public class navigation extends AppCompatActivity {
     Button button;
     TextView latitude, longitude, position;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.navigation_test);
+        setContentView(R.layout.navigation);
         //Tmap
 //        final TMapTapi tmaptapi = new TMapTapi(this);
 //        tmaptapi.setSKTMapAuthentication ("ffa317ad1ab94a9ca5365c8a0305bd88");
@@ -51,7 +51,7 @@ public class navigation_test extends AppCompatActivity {
                 );
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(uri);
-                navigation_test.this.startActivity(intent);
+                navigation.this.startActivity(intent);
             }
         });
     }
