@@ -35,13 +35,56 @@
                 android:layout_weight="97"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="90"
-                    android:textColor="#000000"
-                    android:text="TV1" />
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:id="@+id/Option_TextView_DistanceControl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15sp"
+                        android:layout_marginRight="10sp"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textSize="21sp"
+                        android:textColor="#222222"
+                        android:text="핀 표시 거리 조절" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/Option_BTN_Dec"
+                            android:layout_width="40sp"
+                            android:layout_height="35sp"
+                            android:layout_weight="1"
+                            android:text=" - " />
+
+                        <TextView
+                            android:id="@+id/Option_TextView_nowDistance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:gravity="center"
+                            android:text="거리"
+                            android:textColor="#222222"
+                            android:textSize="15sp" />
+
+                        <Button
+                            android:id="@+id/Option_BTN_Add"
+                            android:layout_width="40sp"
+                            android:layout_height="35sp"
+                            android:layout_weight="1"
+                            android:text=" + " />
+                    </LinearLayout>
+                </LinearLayout>
+
 
                 <TextView
                     android:id="@+id/TextView_Option_Info01"
@@ -49,9 +92,10 @@
                     android:layout_height="wrap_content"
                     android:gravity="bottom|center"
                     android:paddingRight="5sp"
-                    android:textSize="14sp"
                     android:text="@string/Info01"
-                    android:textColor="#171717" />
+                    android:textColor="#171717"
+                    android:textSize="14sp" />
+
                 <TextView
                     android:id="@+id/TextView_Option_Info02"
                     android:layout_width="match_parent"
@@ -59,9 +103,9 @@
                     android:gravity="bottom|center"
                     android:paddingRight="5sp"
                     android:paddingBottom="8sp"
-                    android:textSize="10sp"
                     android:text="@string/Info02"
                     android:textColor="#363636"
+                    android:textSize="10sp"
                     tools:ignore="SmallSp" />
             </LinearLayout>
         </LinearLayout>

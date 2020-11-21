@@ -177,12 +177,17 @@ class DataManager extends AsyncTask<String, Integer, String> {
 
         int result = db.update(scopeDBName, values, "Scope_distance=?", new String[]{distance});
         if(result != 1){
-            Log.e("","거리 설정 업데이트 실패" );
+            Log.e("DataManager","UpdateSearchScope : 거리 설정 업데이트 실패" );
+            Log.e("DataManager","거리값 : " + distance);
         }else{
-            Log.d("","거리 설정 업데이트 성공" );
+            Log.d("DataManager","거리 설정 업데이트 성공" );
         }
         db.close();
     }
+    public static void UpdateSearchScope(int distance){
+        UpdateSearchScope(Integer.toString(distance));
+    }
+
 
     public static FireBaseStatus Init_CheckFirebase(boolean doPrintDebug){
         FireBaseStatus res = null;

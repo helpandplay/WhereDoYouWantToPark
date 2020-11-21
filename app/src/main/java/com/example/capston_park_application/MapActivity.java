@@ -78,6 +78,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // DB 를 사용하기 위해 DataManager의 Context 설정
         DataManager.setContext(this.getBaseContext());
 
+        // 핀 표시 거리 변경
+        ViewDistance = Integer.parseInt(DataManager.ReadSearchScope());
+
         //주소 검색기능
         searchview = findViewById(R.id.searchBar);
         searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -162,6 +165,40 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         return true;
                     }
                 });
+
+                Button Btn_add = findViewById(R.id.Option_BTN_Add);
+                Button Btn_dec = findViewById(R.id.Option_BTN_Dec);
+                final TextView tv = findViewById(R.id.Option_TextView_nowDistance);
+
+                tv.setText(ViewDistance + "m");
+
+                Btn_add.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v){
+                        if(ViewDistance >= 20000){
+                            // TODO : 더 이상 거리를 늘릴 수 없다고 알리기
+                        }
+                        else{
+                            ViewDistance += 100;
+                            tv.setText(ViewDistance + "m");
+                            DataManager.UpdateSearchScope(ViewDistance);
+                        }
+                    }});
+
+                Btn_dec.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v){
+                        if(ViewDistance <= 100){
+                            // TODO : 더 이상 거리를 줄일 수 없다고 알리기
+                        }
+                        else{
+                            ViewDistance -= 100;
+                            tv.setText(ViewDistance + "m");
+                            DataManager.UpdateSearchScope(ViewDistance);
+                        }
+                    }});
+
+
             }
         });
         option_close.setOnClickListener(new View.OnClickListener() {
@@ -356,8 +393,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     parkinglot_favoriteimage.setImageResource(R.drawable.favorite_bright);
                 }
 
-
-                // TODO : 즐겨찾기 아이콘 onClick 이벤트 만들기
                 // if(isFavorite()) 회색별 설정, 즐겨찾기 지우기 / else 노란별 설정, 즐겨찾기 추가하기
                 final ParkingLot finalPl = pl;
                 parkinglot_favoriteimage.setOnClickListener(new View.OnClickListener() {
@@ -387,6 +422,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                 // TODO : 길찾기 아이콘 onClick 이벤트 만들기
                 // onClick(){ 카카오네비 연결하기 }
+
 
 
 
@@ -517,8 +553,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(
                 Double.parseDouble(pl.getLatitude()),
                 Double.parseDouble(pl.getLongittude()))));
-
-
     }
 
 }
@@ -557,7 +591,9 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
 
     }
 
-    // 생성자에서 데이터 리스트 객체를 전달받음.
+    // 생성자에서 데이터 리스트 객체를 전달받음
+    // Activity a는 아직 안씀(null 받아옴)
+    // 창 닫히고 카메라가 이동하는 이벤트를 발생하기 위해 MapActivity를 가지고 있음
     SimpleTextAdapter(ArrayList<FavoriteDB> list, Activity a, MapActivity ma)
     {
         this.ma = ma;
@@ -643,7 +679,6 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
                 // 내 위치 아이콘 눌렀을 때 실행할 이벤트
                 ParkingLot pl = DataManager.getParkingLotbyName((String) holder.Name.getText());
                 ma.closeFavoriteDrawer(pl);
-
             }
         });
 
