@@ -2,6 +2,7 @@ package com.example.capston_park_application;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -59,6 +60,7 @@ public class LoadingActivity extends AppCompatActivity {
     public void Init_OK(){
         TextView PrintingLog = (TextView) findViewById(R.id.Loading_TextView_PrintLog);
         // String message = "주차장 갯수 : " + DataManager.List_ParkingLot.size() + "\n"+ "isinit : " + DataManager.isInit();
+        Log.i("", "총 " + DataManager.List_ParkingLot.size() + " 개의 주차장 데이터 로드됨");
         String message = "로딩 완료!";
         PrintingLog.setText(message);
 
