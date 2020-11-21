@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/border_favorite_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:id="@+id/RecyclerView_Favorite_LinearLayout01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="2sp"
+        android:orientation="horizontal"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="84sp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/RecyclerView_Favorite_ParkinglotName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:paddingLeft="8sp"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:text="주차장 이름"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/parkinglot_address_new_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:text="도로명"
+                        android:background="@drawable/button_background"
+                        android:textColor="#0099FF"/>
+
+                    <TextView
+                        android:id="@+id/parkinglot_address_old_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:text="지 번"
+                        android:background="@drawable/button_background"
+                        android:textColor="#0099FF"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/RecyclerView_Favorite_TextView_AddressNew"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center|left"
+                        android:text="주차장 신주소"
+                        android:textColor="#000000"
+                        android:textSize="13dp" />
+
+                    <TextView
+                        android:id="@+id/RecyclerView_Favorite_TextView_AddressOld"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center|left"
+                        android:text="주차장 구주소"
+                        android:textColor="#000000"
+                        android:textSize="13dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/RecyclerView_Favorite_ImageButton_ToggleFavorite"
+                android:layout_gravity="center"
+                android:layout_width="35sp"
+                android:layout_height="35sp"
+                android:layout_margin="4sp"
+                android:src="@drawable/favorite_bright" />
+
+            <ImageButton
+                android:id="@+id/RecyclerView_Favorite_ImageButton_goKakaoMap"
+                android:layout_gravity="center"
+                android:layout_width="40sp"
+                android:layout_height="40sp"
+                android:layout_margin="4sp"
+                android:background="@drawable/button_background"
+                android:src="@drawable/location" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

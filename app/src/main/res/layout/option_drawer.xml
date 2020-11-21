@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/option_drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/option_drawer"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/searchbar_background"
+        android:elevation="10dp"
+        android:visibility="gone">
+        <!-- 추가할땐 위 를 visible로 바꾼후 추가후 다시 gone-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btn_option_close"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:background="@drawable/button_background"
+                app:srcCompat="@drawable/option_close_btn_image"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="97"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="90"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:id="@+id/Option_TextView_DistanceControl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15sp"
+                        android:layout_marginRight="24sp"
+                        android:gravity="center_horizontal"
+                        android:textStyle="bold"
+                        android:textSize="21sp"
+                        android:textColor="#222222"
+                        android:text="핀 표시 거리 조절" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/Option_BTN_Dec"
+                            android:layout_width="40sp"
+                            android:layout_height="35sp"
+                            android:layout_weight="1"
+                            android:text=" - " />
+
+                        <TextView
+                            android:id="@+id/Option_TextView_nowDistance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:gravity="center_horizontal"
+                            android:text="거리"
+                            android:textColor="#222222"
+                            android:textSize="15sp" />
+
+                        <Button
+                            android:id="@+id/Option_BTN_Add"
+                            android:layout_width="40sp"
+                            android:layout_height="35sp"
+                            android:layout_weight="1"
+                            android:layout_marginRight="24sp"
+                            android:text=" + " />
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/TextView_Option_Info01"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="25sp"
+                    android:gravity="bottom|center"
+                    android:paddingRight="5sp"
+                    android:text="@string/Info01"
+                    android:textColor="#171717"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/TextView_Option_Info02"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="25sp"
+                    android:gravity="bottom|center"
+                    android:paddingRight="5sp"
+                    android:paddingBottom="8sp"
+                    android:text="@string/Info02"
+                    android:textColor="#363636"
+                    android:textSize="10sp"
+                    tools:ignore="SmallSp" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

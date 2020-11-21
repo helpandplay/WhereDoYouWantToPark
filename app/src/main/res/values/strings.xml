@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Capston_park_Application</string>
+    <string name="google_map_api_key">AIzaSyCGtlTC5O73XE0vXeDGLjzNjBX-_SThVkc</string>
+    <string name="Info01">주차장 정보\n공공데이터 포털 제공</string>
+    <string name="Info02">https://www.data.go.kr/</string>
 </resources>
