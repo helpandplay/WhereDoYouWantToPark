@@ -22,11 +22,12 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/RecyclerView_Favorite"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="95" />
+                android:layout_height="wrap_content"
+                android:background="@drawable/border"
+                android:layout_weight="99" />
 
             <Button
-                android:layout_weight="5"
+                android:layout_weight="1"
                 android:id="@+id/btn_favorite_close"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

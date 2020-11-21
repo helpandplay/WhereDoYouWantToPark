@@ -73,10 +73,10 @@ class DataManager extends AsyncTask<String, Integer, String> {
         cursor = db.rawQuery(FavoriteDBSQL.DATA_READ, null);
 
         while(cursor.moveToNext()){
-            FavoriteDB favoriteDB = new FavoriteDB();
-            favoriteDB.parkingID=cursor.getString(cursor.getColumnIndex("ParkingLot_id"));
-            favoriteDB.parkingName=cursor.getString(cursor.getColumnIndex("ParkingLot_name"));
-            list.add(favoriteDB);
+            FavoriteDB f_data = new FavoriteDB();
+            f_data.parkingID = cursor.getString(cursor.getColumnIndex("ParkingLot_id"));
+            f_data.parkingName = cursor.getString(cursor.getColumnIndex("ParkingLot_name"));
+            list.add(f_data);
         }
         cursor.close();
         db.close();
@@ -111,9 +111,9 @@ class DataManager extends AsyncTask<String, Integer, String> {
 
         long result = db.insert(favoriteDBName, null, values);
         if(result >0){
-            Log.d("","즐겨찾기 요소 추가 성공");
+            Log.d("","즐겨찾기 요소 추가 성공. [이름 : " + parkingName + "]");
         }else{
-            Log.e("","즐겨찾기 요소 추가 실패");
+            Log.e("","즐겨찾기 요소 추가 실패! [이름 : " + parkingName + "]");
         }
         db.close();
     }
@@ -202,8 +202,8 @@ class DataManager extends AsyncTask<String, Integer, String> {
                     "경기도 삼평동 681 에이치스퀘어 N동 6층",
                     "123",
                     "02-1234-5678",
-                    "127.108640",
-                    "37.402111"));
+                    "37.402111",
+                    "127.108640"));
 
             List_ParkingLot.add(new ParkingLot(
                     "00000002",
@@ -212,8 +212,18 @@ class DataManager extends AsyncTask<String, Integer, String> {
                     "대전 대덕구 오정동 133",
                     "300",
                     "042-1234-5678",
-                    "127.42114766",
-                    "36.35445367"));
+                    "36.35464605201017",
+                    "127.42108643668588"));
+
+            List_ParkingLot.add(new ParkingLot(
+                    "00000003",
+                    "대전신학대학교",
+                    "대전 대덕구 한남로 70 한남대학교",
+                    "대전 대덕구 오정동 133",
+                    "300",
+                    "042-1234-5678",
+                    "36.35050334345364",
+                    "127.42356233636478"));
 
         }
 

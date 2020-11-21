@@ -18,6 +18,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle; //String을 쓰기위함
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,6 +28,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,6 +60,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     View option_drawerView, option_drawerlayout, favorite_drawerView, favorite_drawerlayout, search_layout, parkinglot_layout;
     ImageButton option_open, option_close, favorite_open, location , zoomin, zoomout;
     Button favorite_close;
+    RecyclerView Favorite_RecyclerView;
+
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
     private int ViewDistance = 2500;
@@ -77,6 +81,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         favorite_close = findViewById(R.id.btn_favorite_close);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        // DB 를 사용하기 위해 DataManager의 Context 설정
+        DataManager.setContext(this.getBaseContext());
 
         //주소 검색기능
         searchview = findViewById(R.id.searchBar);
@@ -130,7 +137,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         final Animation translateLeft = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_left);
         final Animation translateRight = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_right);
 
-        // ViewDistance = DataMAnager?.getDistance???
         parkinglot_layout = (View)findViewById(R.id.parkinglot_layout);
         option_drawerView = (View)findViewById(R.id.option_drawer);
         option_drawerlayout = (View)findViewById(R.id.option_drawer_layout);
@@ -139,6 +145,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         search_layout = (View)findViewById(R.id.relative);
 
         // 즐겨찾기 리스트 새로고침
+        Favorite_RecyclerView = (RecyclerView) findViewById(R.id.RecyclerView_Favorite);
         RefreshFavorite();
 
 
@@ -196,9 +203,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         return true;
                     }
                 });
-
-
-
 
 
             }
@@ -291,6 +295,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         final TextView parkinglot_capacity = findViewById(R.id.parkinglot_capacity);
 
         final Button closebutton = findViewById(R.id.tableclose);
+
         ///////////////////마커 클릭시 이벤트처리///////////////////
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -349,13 +354,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     parkinglot_address_new.setText("정보없음");
                 }
 
+                // 주차장 상세정보의 즐겨찾기 아이콘 관련 처리
+                ImageView FavoriteIcon = (ImageView)findViewById(R.id.parkignlot_favorite_button);
                 // TODO : 즐겨찾기 아이콘 즐겨찾기 여부에 따라 모양 변경하기
                 // if(isFavorite()) 노란별 설정 / else 회색별 설정
 
 
                 // TODO : 즐겨찾기 아이콘 onClick 이벤트 만들기
                 // if(isFavorite()) 회색별 설정, 즐겨찾기 지우기 / else 노란별 설정, 즐겨찾기 추가하기
-
+                final ParkingLot finalPl = pl;
+                FavoriteIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DataManager.insertFavoriteElement(finalPl.getID_ParkingLot(), finalPl.getName_ParkingLot());
+                        // TODO : 토스트가 출력되지 않음
+                        Toast.makeText(MapActivity.this, finalPl.getName_ParkingLot() + " 을 즐겨찾기에 추가", Toast.LENGTH_LONG);
+                    }
+                });
 
                 // TODO : 길찾기 아이콘 onClick 이벤트 만들기
                 // onClick(){ 카카오네비 연결하기 }
@@ -450,16 +465,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         );
     }
 
+    // 즐겨찾기 리사이클러뷰 세팅
     private void RefreshFavorite(){
-        // 즐겨찾기 리사이클러뷰 세팅
-        RecyclerView rv = (RecyclerView) findViewById(R.id.RecyclerView_Favorite);
         ArrayList<FavoriteDB> flist = DataManager.ReadFavoriteList();
+        Log.d("RefreshFavorite", "즐겨찾기 리스트 길이 : " + flist.size());
 
-        RecyclerView recyclerView = findViewById(R.id.RecyclerView_Favorite) ;
-        recyclerView.setLayoutManager(new LinearLayoutManager(this)) ;
+        // 리사이클러뷰에 LinearLayoutManager 객체 지정.
+        Favorite_RecyclerView.setLayoutManager(new LinearLayoutManager(this)) ;
 
+        // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
         SimpleTextAdapter adapter = new SimpleTextAdapter(flist) ;
-        recyclerView.setAdapter(adapter) ;
+        Favorite_RecyclerView.setAdapter(adapter) ;
+        Log.d("RefreshFavorite", "어뎁터 아이템 카운트 : " + adapter.getItemCount());
 
 
     }
@@ -506,7 +523,7 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(SimpleTextAdapter.ViewHolder holder, int position) {
-        String text = mData.get(position).parkingID ;
+        String text = mData.get(position).parkingName ;
         holder.textView1.setText(text) ;
     }
 
