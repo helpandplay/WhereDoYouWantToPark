@@ -629,7 +629,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {   //주차장 디테일 버튼 close 클릭시
                 // TODO : 길찾기 아이콘(주차장 상세 정보 열리면 즐겨찾기 별 옆에 있는 하얀 동그라미에 검은색 P) onClick 이벤트 만들기
-                // 카카오 내비 연결했는데, 오류코드없이 실행화면에서 넘어가지 않음. 원인을 모르겠음.
+                // 카카오 내비 연결했는데, 오류코드없이 실행화면에서 넘어가지 않음. 원인을 모르겠음. 아시는 분?
                 String latitude = finalPl.getLatitude();
                 String longittude = finalPl.getLongittude();
                 String goal = finalPl.getName_ParkingLot();
@@ -642,6 +642,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 );
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
+
             }
         });
 
