@@ -176,12 +176,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     @Override
                     public void onClick(View v){
                         if(ViewDistance >= 20000){
-                            // TODO : 더 이상 거리를 늘릴 수 없다고 알리기
+                            Toast.makeText(MapActivity.this, "더 이상 거리를 늘릴 수 없습니다.", Toast.LENGTH_SHORT).show();
                         }
                         else{
                             ViewDistance += 100;
                             tv.setText(ViewDistance + "m");
                             DataManager.UpdateSearchScope(ViewDistance);
+                            LatLng mPosition = mMap.getCameraPosition().target;
+                            MarkerGenerator(DataManager.getParkinglotInRange(mPosition, ViewDistance));
                         }
                     }});
 
@@ -189,7 +191,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     @Override
                     public void onClick(View v){
                         if(ViewDistance <= 100){
-                            // TODO : 더 이상 거리를 줄일 수 없다고 알리기
+                            Toast.makeText(MapActivity.this, "더 이상 거리를 줄일 수 없습니다.", Toast.LENGTH_SHORT).show();
+                            LatLng mPosition = mMap.getCameraPosition().target;
+                            MarkerGenerator(DataManager.getParkinglotInRange(mPosition, ViewDistance));
                         }
                         else{
                             ViewDistance -= 100;
@@ -325,6 +329,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         final TextView parkinglot_weekend_time_close = findViewById(R.id.parkinglot_weekend_time_close);
         final TextView parkinglot_capacity = findViewById(R.id.parkinglot_capacity);
         final ImageView parkinglot_favoriteimage = findViewById(R.id.parkignlot_favorite_button);
+        final ImageButton parkinglot_P_Button = findViewById(R.id.goto_kakaomap);
 
         final Button closebutton = findViewById(R.id.tableclose);
 
@@ -404,8 +409,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             DataManager.insertFavoriteElement(finalPl.getID_ParkingLot(), finalPl.getName_ParkingLot());
                             // 별을 빛나게
                             parkinglot_favoriteimage.setImageResource(R.drawable.favorite_bright);
-                            // TODO : 토스트가 출력되지 않음. 고치거나, 대체 필요
-                            Toast.makeText(MapActivity.this, finalPl.getName_ParkingLot() + " 을 즐겨찾기에 추가", Toast.LENGTH_LONG);
+                            Toast.makeText(MapActivity.this, "주차장 " + finalPl.getName_ParkingLot() + " 을 즐겨찾기에 추가하였습니다", Toast.LENGTH_LONG).show();
+
                         }
                         // 즐겨찾기인 경우
                         else{
@@ -413,18 +418,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             DataManager.deleteFavoriteElement(finalPl.getName_ParkingLot());
                             // 별 불끄기
                             parkinglot_favoriteimage.setImageResource(R.drawable.favorite_dark);
-                            // TODO : 토스트가 출력되지 않음. 고치거나, 대체 필요
-                            Toast.makeText(MapActivity.this, finalPl.getName_ParkingLot() + " 을  즐겨찾기에서 삭제", Toast.LENGTH_LONG);
+                            Toast.makeText(MapActivity.this, "주차장 " + finalPl.getName_ParkingLot() + "을  즐겨찾기에서 삭제하였습니다", Toast.LENGTH_LONG).show();
                         }
 
                     }
                 });
 
-                // TODO : 길찾기 아이콘 onClick 이벤트 만들기
-                // onClick(){ 카카오네비 연결하기 }
+                parkinglot_P_Button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {   //주차장 디테일 버튼 close 클릭시
+                        // TODO : 길찾기 아이콘(주차장 상세 정보 열리면 즐겨찾기 별 옆에 있는 하얀 동그라미에 검은색 P) onClick 이벤트 만들기
 
-
-
+                    }
+                });
 
 
                 parkinglot_layout.setVisibility(View.VISIBLE);
@@ -535,8 +541,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    // 즐겨찾기 드로워 닫고 선택한 주차장 위치로 이동하는 메소드
-    // 너무 위험한 코드
+    // 즐겨찾기 드로워 닫고 선택한 주차장 위치로 이동하는 메소드, Adapter Class에서 호출함
     public void closeFavoriteDrawer(ParkingLot pl){
         final Animation translateRight = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_right);
         final ImageButton mylocation = (ImageButton)findViewById(R.id.mylocation);
