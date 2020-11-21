@@ -1,17 +1,14 @@
 package com.example.capston_park_application;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -26,7 +23,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
@@ -34,20 +30,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.util.Arrays; // 검색내용 저장하기 위한 어레이 배열
-import java.util.ArrayList; // 위와 같음
+import java.util.ArrayList;
 import java.util.List;
 
 //구글 지도 import
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -489,7 +481,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 // 코드참고 : https://recipes4dev.tistory.com/154
 class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolder> {
 
-    private ArrayList<FavoriteDB> mData = null ;
+    private ArrayList<ParkingLot> mData = null ;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -501,11 +493,28 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
             // 뷰 객체에 대한 참조. (hold strong reference)
             textView1 = itemView.findViewById(R.id.RecyclerView_Favorite_Text) ;
         }
+
     }
 
     // 생성자에서 데이터 리스트 객체를 전달받음.
-    SimpleTextAdapter(ArrayList<FavoriteDB> list) {
-        mData = list ;
+    SimpleTextAdapter(ArrayList<FavoriteDB> list)
+    {
+        mData = new ArrayList<ParkingLot>();
+        for(FavoriteDB f_data : list){
+            ParkingLot pl = DataManager.getParkingLotbyID(f_data.parkingID);
+            if(pl == null){
+                Log.e("SimpleTextAdapter", "DataManager.getParkingLotbyID 에서 널 리턴 발생, skipping . . .");
+            }
+            else{
+                if(mData.contains(pl)){
+                    Log.d("SimpleTextAdapter", pl.getName_ParkingLot() + " 는 이미 있음, skipping . . .");
+                }
+                else{
+                    mData.add(pl);
+                }
+            }
+        }
+
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
@@ -523,7 +532,7 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(SimpleTextAdapter.ViewHolder holder, int position) {
-        String text = mData.get(position).parkingName ;
+        String text = mData.get(position).getName_ParkingLot() ;
         holder.textView1.setText(text) ;
     }
 
@@ -531,5 +540,11 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
     @Override
     public int getItemCount() {
         return mData.size() ;
+    }
+
+    private void DeleteParkingLotData(){
+
+
+
     }
 }

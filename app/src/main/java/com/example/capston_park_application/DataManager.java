@@ -303,6 +303,29 @@ class DataManager extends AsyncTask<String, Integer, String> {
         return (rad * 180 / Math.PI);
     }
 
+    // 주차장 ID로 주차장 객체 얻기
+    public static ParkingLot getParkingLotbyID(String ID){
+        for(ParkingLot pl : List_ParkingLot){
+            if(pl.getID_ParkingLot().equals(ID)){
+                return pl;
+            }
+        }
+        Log.e("DataManager", "Null return occur");
+        Log.e("DataManager", "from asParkingLotbyID, arg(ID) : " + ID);
+        return null;
+    }
+
+    // 주차장 이름으로 주차장 객체 얻기
+    public static ParkingLot getParkingLotbyName(String name){
+        for(ParkingLot pl : List_ParkingLot){
+            if(pl.getID_ParkingLot().equals(name)){
+                return pl;
+            }
+        }
+        Log.e("DataManager", "Null return occur");
+        Log.e("DataManager", "from asParkingLotbyName, arg(Name) : " + name);
+        return null;
+    }
 
     // 비동기 작업을 위한 AsyncTask<String, Boolean, String> 코드들
     // onPreExecute : 비동기 선행 준비 메소드
