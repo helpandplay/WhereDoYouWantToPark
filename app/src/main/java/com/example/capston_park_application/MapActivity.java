@@ -488,13 +488,18 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textView1 ;
+        TextView Name;
+        TextView addrOld;
+        TextView addrNew;
 
         ViewHolder(View itemView) {
             super(itemView) ;
 
             // 뷰 객체에 대한 참조. (hold strong reference)
-            textView1 = itemView.findViewById(R.id.RecyclerView_Favorite_ParkinglotName) ;
+            Name = itemView.findViewById(R.id.RecyclerView_Favorite_ParkinglotName) ;
+            addrOld = itemView.findViewById(R.id.RecyclerView_Favorite_TextView_AddressOld) ;
+            addrNew = itemView.findViewById(R.id.RecyclerView_Favorite_TextView_AddressNew) ;
+
         }
 
     }
@@ -535,8 +540,23 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(SimpleTextAdapter.ViewHolder holder, int position) {
-        String text = mData.get(position).getName_ParkingLot() ;
-        holder.textView1.setText(text) ;
+        holder.Name.setText(mData.get(position).getName_ParkingLot()) ;
+
+        // 구주소 정보 없을때
+        if(TextUtils.isEmpty(mData.get(position).getAddress_old())){
+            holder.addrOld.setText("정보없음");
+        }
+        else{
+            holder.addrOld.setText(mData.get(position).getAddress_old()) ;
+        }
+
+        // 신주소 정보 없을때
+        if(TextUtils.isEmpty(mData.get(position).getAddress_new())){
+            holder.addrNew.setText("정보없음");
+        }
+        else{
+            holder.addrNew.setText(mData.get(position).getAddress_new()) ;
+        }
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.
