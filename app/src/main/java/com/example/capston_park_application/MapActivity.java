@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -189,7 +191,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         option_drawerView = (View)findViewById(R.id.option_drawer);
         option_drawerlayout = (View)findViewById(R.id.option_drawer_layout);
         favorite_drawerView = (View)findViewById(R.id.favorite_drawer);
-        favorite_drawerlayout = (View)findViewById(R.id.favorite_drawer_layout);
+        // favorite_drawerlayout = (View)findViewById(R.id.favorite_drawer_layout);
         search_layout = (View)findViewById(R.id.relative);
 
         // 즐겨찾기 리스트 새로고침
@@ -325,9 +327,48 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 }
             }
         });
+
+
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    // 뒤로가기 버튼을 눌렀을 때 실행됨
+    @Override
+    public void onBackPressed () {
+        final Animation translateDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_down);
+
+        AlertDialog.Builder alBuilder = new AlertDialog.Builder(this);
+
+        // "예" 버튼을 누르면 실행되는 리스너
+        alBuilder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish(); // 현재 액티비티를 종료한다.
+            }
+        });
+        // "아니오" 버튼을 누르면 실행되는 리스너
+        alBuilder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                return; // 아무런 작업도 하지 않고 돌아간다.
+            }
+        });
+
+        // 상세정보 창, 옵션 창, 즐겨찾기 창이 켜져있을 때는 그 창을 닫는다.
+        if(parkinglot_layout.getVisibility() == View.VISIBLE) {
+            parkinglot_layout.setVisibility(View.INVISIBLE);
+            parkinglot_layout.startAnimation(translateDown);
+        } else if (option_drawerView.getVisibility() == View.VISIBLE) {
+            option_close.performClick();
+        } else if (favorite_drawerView.getVisibility() == View.VISIBLE) {
+            favorite_close.performClick();
+        } else { // 아무것도 안켜져 있을 시 종료 안내 창을 띄운다.
+            alBuilder.setMessage("종료하시겠습니까?");
+            alBuilder.setTitle("프로그램 종료");
+            alBuilder.show();
+        }
     }
 
     @Override
@@ -806,4 +847,5 @@ class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolde
 
 
     }
+
 }
