@@ -191,7 +191,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         option_drawerView = (View)findViewById(R.id.option_drawer);
         option_drawerlayout = (View)findViewById(R.id.option_drawer_layout);
         favorite_drawerView = (View)findViewById(R.id.favorite_drawer);
-        // favorite_drawerlayout = (View)findViewById(R.id.favorite_drawer_layout);
+        favorite_drawerlayout = (View)findViewById(R.id.favorite_drawer_layout);
         search_layout = (View)findViewById(R.id.relative);
 
         // 즐겨찾기 리스트 새로고침
