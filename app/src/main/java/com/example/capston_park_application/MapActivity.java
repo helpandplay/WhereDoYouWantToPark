@@ -368,6 +368,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(16));
 
+        // gps 버튼을 이용해 내 위치로 이동
+        // 예외 처리 되있으므로, 위치정보를 받지 못할 시 한남대에 그대로 있음.
+        ImageButton myLocation = (ImageButton)findViewById(R.id.mylocation);
+        myLocation.performClick();
+
         ///////////////////마커 클릭시 이벤트처리///////////////////
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
