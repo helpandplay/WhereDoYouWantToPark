@@ -66,9 +66,9 @@ import com.kakao.sdk.navi.model.NaviOption;
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
     public static Context context_MainScreen;
     SearchView searchview;
-    View option_drawerView, option_drawerlayout, favorite_drawerView, favorite_drawerlayout, search_layout, parkinglot_layout;
-    ImageButton option_open, option_close, favorite_open, location , zoomin, zoomout;
-    Button favorite_close;
+    View option_drawerView, option_drawerlayout, favorite_drawerView, favorite_drawerlayout, search_layout, parkinglot_layout, parkinglot_base;
+    ImageButton option_open, option_close, favorite_open, location, zoomin, zoomout;
+    Button favorite_close, parkinglot_detail_left, parkinglot_detail_right;
     RecyclerView Favorite_RecyclerView;
 
     Marker selectedMarker;
@@ -290,8 +290,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         return true;
                     }
                 });
-
-
             }
         });
         favorite_close.setOnClickListener(new View.OnClickListener() {
@@ -591,8 +589,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         ParkingLot pl = null;
         // 무식하게 for문돌려서 리스트에서 주차장 이름으로 주차장 객체를 찾는다.
         for(ParkingLot t : DataManager.List_ParkingLot){
+            int tmp = 0;
+            tmp ++;
             if(t.getName_ParkingLot().equals(P_Name)){
                 pl = t;
+                if(pl.getLongittude().equals(pl.getLongittude()))
                 break;
             }
         }

@@ -50,6 +50,7 @@
         android:background="@drawable/button_background"
         app:srcCompat="@drawable/find_location"/>
 
+
 <RelativeLayout
     android:id="@+id/parkinglot_layout_image"
     android:layout_width="match_parent"
@@ -68,49 +69,6 @@
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintVertical_bias="1.0">
 
-    <TextView
-        android:id="@+id/parkinglot_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15sp"
-        android:layout_marginLeft="15sp"
-        android:text="주차장 이름"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        android:textColor="#000000">
-    </TextView>
-
-    <ImageButton
-        android:id="@+id/location"
-        android:layout_width="30sp"
-        android:layout_height="30sp"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="10sp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/parkinglot_name"
-        android:background="@drawable/button_background"
-        app:srcCompat="@drawable/location" />
-
-    <ImageButton
-        android:id="@+id/time"
-        android:layout_width="30sp"
-        android:layout_height="30sp"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="10sp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/location"
-        android:background="@drawable/button_background"
-        app:srcCompat="@drawable/time" />
-
-    <ImageView
-        android:id="@+id/parkinglot_capacity_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="121dp"
-        android:layout_marginLeft="40dp"
-        android:layout_toRightOf="@id/parkinglot_time_text"
-        app:srcCompat="@drawable/parkinglot_capacity" />
-
     <Button
         android:id="@+id/tableclose"
         android:layout_width="40dp"
@@ -121,201 +79,296 @@
         android:elevation="8sp"
         android:background="@drawable/close_btn"></Button>
 
-    <TextView
-        android:id="@+id/parkinglot_address_new"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/parkinglot_address_new_text"
-        android:layout_below="@+id/parkinglot_name"
-        android:layout_marginLeft="5sp"
-        android:layout_marginTop="5dp"
-        android:text="주차장 신주소"
-        android:textColor="#000000"
-        android:textSize="15dp"></TextView>
+    <Button
+        android:id="@+id/parkinglot_layout_right_btn"
+        android:layout_width="20dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="150dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/toright"/>
 
-    <TextView
-        android:id="@+id/parkinglot_address_old"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/parkinglot_address_old_text"
-        android:layout_below="@+id/parkinglot_address_new"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="6dp"
-        android:text="주차장 구주소"
-        android:textColor="#000000"
-        android:textSize="15dp"></TextView>
+    <Button
+        android:id="@+id/button_layout_left_btn"
+        android:layout_width="20dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="150dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/toleft"/>
 
-    <TextView
-        android:id="@+id/parkinglot_capacity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="121dp"
-        android:layout_toRightOf="@+id/parkinglot_capacity_image"
-        android:text="자리수"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        android:textColor="#000000">
-    </TextView>
+    <RelativeLayout
+        android:id="@+id/parkinglot_layout_image_base"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/parkinglot_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15sp"
+            android:layout_marginLeft="15sp"
+            android:text="주차장 이름"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:textColor="#000000">
+        </TextView>
 
-    <TextView
-        android:id="@+id/parkinglot_time_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
-        android:layout_marginLeft="5sp"
-        android:layout_toRightOf="@+id/time"
-        android:layout_below="@+id/parkinglot_name"
-        android:text="주차장 영업시간"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:textColor="#000000">
-    </TextView>
+        <ImageButton
+            android:id="@+id/location"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10sp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/parkinglot_name"
+            android:background="@drawable/button_background"
+            app:srcCompat="@drawable/location" />
 
-    <TextView
-        android:id="@+id/parkinglot_weekly"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:layout_marginLeft="-5sp"
-        android:layout_toRightOf="@+id/time"
-        android:layout_below="@+id/parkinglot_time_text"
-        android:text="정보없음"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:textColor="#000000">
-    </TextView>
+        <ImageButton
+            android:id="@+id/time"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/location"
+            android:background="@drawable/button_background"
+            app:srcCompat="@drawable/time" />
 
-    <TextView
-        android:id="@+id/parkinglot_sat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="-5sp"
-        android:layout_toRightOf="@+id/time"
-        android:layout_below="@+id/parkinglot_weekly"
-        android:text="정보없음"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:textColor="#000000">
-    </TextView>
+        <ImageView
+            android:id="@+id/parkinglot_capacity_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="121dp"
+            android:layout_marginLeft="40dp"
+            android:layout_toRightOf="@id/parkinglot_time_text"
+            app:srcCompat="@drawable/parkinglot_capacity" />
 
-    <TextView
-        android:id="@+id/parkinglot_weekend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="-5sp"
-        android:layout_toRightOf="@+id/time"
-        android:layout_below="@+id/parkinglot_sat"
-        android:text="정보없음"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:textColor="#000000">
-    </TextView>
 
-    <TextView
-        android:id="@+id/parkinglot_weekly_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="190dp"
-        android:layout_below="@+id/time"
-        android:text="평일 시간"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:textColor="#000000">
-    </TextView>
+        <TextView
+            android:id="@+id/parkinglot_address_new"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/parkinglot_address_new_text"
+            android:layout_below="@+id/parkinglot_name"
+            android:layout_marginLeft="5sp"
+            android:layout_marginTop="5dp"
+            android:text="주차장 신주소"
+            android:textColor="#000000"
+            android:textSize="15dp"></TextView>
 
-    <TextView
-        android:id="@+id/parkinglot_sat_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="190dp"
-        android:layout_below="@+id/parkinglot_weekly_time"
-        android:text="토요 시간"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:textColor="#000000">
-    </TextView>
+        <TextView
+            android:id="@+id/parkinglot_address_old"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/parkinglot_address_old_text"
+            android:layout_below="@+id/parkinglot_address_new"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="6dp"
+            android:text="주차장 구주소"
+            android:textColor="#000000"
+            android:textSize="15dp"></TextView>
 
-    <TextView
-        android:id="@+id/parkinglot_weekend_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="190dp"
-        android:layout_below="@+id/parkinglot_sat_time"
-        android:text="공휴 시간"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:textColor="#000000">
-    </TextView>
+        <TextView
+            android:id="@+id/parkinglot_capacity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="121dp"
+            android:layout_toRightOf="@+id/parkinglot_capacity_image"
+            android:text="자리수"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:textColor="#000000">
+        </TextView>
 
-    <TextView
-        android:id="@+id/parkinglot_weekly_time_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14.5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/parkinglot_weekly_time"
-        android:layout_below="@+id/parkinglot_capacity"
-        android:text="끝"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:textColor="#000000">
-    </TextView>
+        <TextView
+            android:id="@+id/parkinglot_time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="68dp"
+            android:layout_marginLeft="5sp"
+            android:layout_toRightOf="@+id/time"
+            android:layout_below="@+id/parkinglot_name"
+            android:text="주차장 영업시간"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#000000">
+        </TextView>
 
-    <TextView
-        android:id="@+id/parkinglot_sat_time_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/parkinglot_sat_time"
-        android:layout_below="@+id/parkinglot_weekly_time_close"
-        android:text="끝"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:textColor="#000000">
-    </TextView>
+        <TextView
+            android:id="@+id/parkinglot_weekly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="-5sp"
+            android:layout_toRightOf="@+id/time"
+            android:layout_below="@+id/parkinglot_time_text"
+            android:text="정보없음"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#000000">
+        </TextView>
 
-    <TextView
-        android:id="@+id/parkinglot_weekend_time_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/parkinglot_sat_time"
-        android:layout_below="@+id/parkinglot_sat_time"
-        android:text="끝"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:textColor="#000000">
-    </TextView>
+        <TextView
+            android:id="@+id/parkinglot_sat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="-5sp"
+            android:layout_toRightOf="@+id/time"
+            android:layout_below="@+id/parkinglot_weekly"
+            android:text="정보없음"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#000000">
+        </TextView>
 
-    <TextView
-        android:id="@+id/parkinglot_address_new_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/location"
-        android:layout_below="@id/parkinglot_name"
-        android:layout_marginTop="6dp"
-        android:text="도로명"
-        android:background="@drawable/button_background"
-        android:textColor="#0099FF"/>
+        <TextView
+            android:id="@+id/parkinglot_weekend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="-5sp"
+            android:layout_toRightOf="@+id/time"
+            android:layout_below="@+id/parkinglot_sat"
+            android:text="정보없음"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#000000">
+        </TextView>
 
-    <TextView
-        android:id="@+id/parkinglot_address_old_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/location"
-        android:layout_below="@id/parkinglot_address_new_text"
-        android:layout_marginTop="6dp"
-        android:text="지번"
-        android:background="@drawable/button_background"
-        android:textColor="#0099FF"/>
+        <TextView
+            android:id="@+id/parkinglot_weekly_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="190dp"
+            android:layout_below="@+id/time"
+            android:text="평일 시간"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#000000">
+        </TextView>
+
+        <TextView
+            android:id="@+id/parkinglot_sat_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="190dp"
+            android:layout_below="@+id/parkinglot_weekly_time"
+            android:text="토요 시간"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#000000">
+        </TextView>
+
+        <TextView
+            android:id="@+id/parkinglot_weekend_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="190dp"
+            android:layout_below="@+id/parkinglot_sat_time"
+            android:text="공휴 시간"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#000000">
+        </TextView>
+
+        <TextView
+            android:id="@+id/parkinglot_weekly_time_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/parkinglot_weekly_time"
+            android:layout_below="@+id/parkinglot_capacity"
+            android:text="끝"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#000000">
+        </TextView>
+
+        <TextView
+            android:id="@+id/parkinglot_sat_time_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/parkinglot_sat_time"
+            android:layout_below="@+id/parkinglot_weekly_time_close"
+            android:text="끝"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#000000">
+        </TextView>
+
+        <TextView
+            android:id="@+id/parkinglot_weekend_time_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/parkinglot_sat_time"
+            android:layout_below="@+id/parkinglot_sat_time"
+            android:text="끝"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#000000">
+        </TextView>
+
+        <TextView
+            android:id="@+id/parkinglot_address_new_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/location"
+            android:layout_below="@id/parkinglot_name"
+            android:layout_marginTop="6dp"
+            android:text="도로명"
+            android:background="@drawable/button_background"
+            android:textColor="#0099FF"/>
+
+        <TextView
+            android:id="@+id/parkinglot_address_old_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/location"
+            android:layout_below="@id/parkinglot_address_new_text"
+            android:layout_marginTop="6dp"
+            android:text="지번"
+            android:background="@drawable/button_background"
+            android:textColor="#0099FF"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:text="순서"
+            android:textSize="10sp"
+            android:textColor="#000000">
+        </TextView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/parkinglot_layout_image_right"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/parkinglot_address_old_text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="테스트"
+            android:layout_centerInParent="true"
+            android:background="@drawable/button_background"
+            android:textColor="#0099FF"/>
+    </RelativeLayout>
+
 
 </RelativeLayout>
 
