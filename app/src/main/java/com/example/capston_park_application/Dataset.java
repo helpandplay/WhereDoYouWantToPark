@@ -18,12 +18,81 @@ class LocationData {
 
     ArrayList<ParkingLot> List_Parkinglot;
 
+    // 같은 위도 경로에 포함된 list를 통한 생성자
     public LocationData(ArrayList<ParkingLot> list){
         this.List_Parkinglot = list;
-        this.Name = List_Parkinglot.get(0).getName_ParkingLot() + " 외 " + List_Parkinglot.size() + "개";
+        setName();
         this.Lat = List_Parkinglot.get(0).getLatitude();
         this.Lng = List_Parkinglot.get(0).getLongittude();
     }
+
+    // 자동 이름 생성기, 이름은 첫 번째 데이터를 기준으로 함
+    public String setName(){
+        if(List_Parkinglot.size() == 0){
+            this.Name = List_Parkinglot.get(0).getName_ParkingLot();
+        }
+        else{
+            this.Name = List_Parkinglot.get(0).getName_ParkingLot() + " 외 " + List_Parkinglot.size() + "개";
+        }
+        return this.Name;
+    }
+
+    // 내장된 리스트에 요소를 넣고 이름까지 자동으로 적용하기 위해 새로운 메소드 작성
+    public void addElement(ParkingLot target){
+        this.List_Parkinglot.add(target);
+        this.setName();
+    }
+
+    // 주어진 위도, 경도와 같으면 참 반환
+    public boolean isLocSame(String Lat, String Lng){
+        return this.Lat.equals(Lat) && this.Lng.equals(Lng);
+    }
+
+    // 위와 같은기능인데 매개변수가 ParkingLot
+    public boolean isLocSame(ParkingLot pl){
+        return isLocSame(pl.getLatitude(), pl.getLongittude());
+    }
+
+    // 주어진 주차장 이름을 리스트에 요소로 가지고 있는가?
+    public int hasParkinglot(String Name){
+        for(int i = 0; i < this.List_Parkinglot.size(); i++){
+            if(this.List_Parkinglot.get(i).getName_ParkingLot().equals(Name)) return i;
+        }
+        return -1;
+    }
+
+    // 정리가 되지 않은(중복 위도, 경도 데이터가 있는) 주차장 리스트를 정리된 LocationData 리스트로 반환하는 메소드
+    public static ArrayList<LocationData> getLocationDataList(ArrayList<ParkingLot> List_allParkingLot){
+        ArrayList<LocationData> Result = new ArrayList<LocationData>();
+            for(ParkingLot pl : List_allParkingLot) {
+
+                // 중복 위도경도가 있어 넣어졌는지 확인하는 boolean flag
+                boolean flag = true;
+
+                for(LocationData ld : Result){
+                    if(ld.isLocSame(pl)){
+                        flag = false;
+                        ld.addElement(pl);
+                        break;
+                    }
+                }
+                if(flag){
+                    ArrayList<ParkingLot> temp_list = new ArrayList<ParkingLot>();
+                    temp_list.add(pl);
+                    Result.add(new LocationData(temp_list));
+                }
+            }
+            return Result;
+    }
+
+    public String getLatitude(){
+        return this.Lat;
+    }
+
+    public String getLongittude(){
+        return this.Lng;
+    }
+
 
 }
 

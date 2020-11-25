@@ -80,7 +80,7 @@
         android:background="@drawable/close_btn"></Button>
 
     <Button
-        android:id="@+id/parkinglot_layout_right_btn"
+        android:id="@+id/button_Next"
         android:layout_width="20dp"
         android:layout_height="25dp"
         android:layout_marginTop="150dp"
@@ -89,7 +89,7 @@
         android:background="@drawable/toright"/>
 
     <Button
-        android:id="@+id/button_layout_left_btn"
+        android:id="@+id/button_Previous"
         android:layout_width="20dp"
         android:layout_height="25dp"
         android:layout_marginTop="150dp"

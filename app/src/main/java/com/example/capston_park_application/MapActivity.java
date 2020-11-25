@@ -64,6 +64,11 @@ import com.kakao.sdk.navi.model.KakaoNaviParams;
 import com.kakao.sdk.navi.model.NaviOption;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+    ArrayList<LocationData> List_Locationlist;
+    LocationData nowLocationData;
+    int nowIndex = 0;
+
     public static Context context_MainScreen;
     SearchView searchview;
     View option_drawerView, option_drawerlayout, favorite_drawerView, favorite_drawerlayout, search_layout, parkinglot_layout, parkinglot_base;
@@ -416,21 +421,44 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                openParkinglotDetailInfo(marker.getTitle());
+                openParkingLotDetailWindow(marker.getTitle());
                 return false;
             }
         });
     }
     // 리스트로부터 지도 핀 생성하는 메소드
     private void MarkerGenerator(ArrayList<ParkingLot> list){
-        for(ParkingLot pl : list){
+
+        this.List_Locationlist = LocationData.getLocationDataList(list);
+
+
+        for(LocationData ld : List_Locationlist){
+
+            if(ld.List_Parkinglot.size() > 1){
+                String txt = "다중\n";
+                for(ParkingLot pl : ld.List_Parkinglot){
+                    txt += pl.getName_ParkingLot() + "\n";
+                }
+                tv_marker.setText(txt);
+            }
+            else{
+                String txt = "단일\n";
+                for(ParkingLot pl : ld.List_Parkinglot){
+                    txt += pl.getName_ParkingLot() + "\n";
+                }
+                tv_marker.setText(txt);
+            }
+
             MarkerOptions mo = new MarkerOptions();
             mo.position(new LatLng(
-                    Double.parseDouble(pl.getLatitude()),
-                    Double.parseDouble(pl.getLongittude()))).
-                    title(pl.getName_ParkingLot());
+                    Double.parseDouble(ld.getLatitude()),
+                    Double.parseDouble(ld.getLongittude()))).
+                    title(ld.Name);
             mo.icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(this, marker_root_view))); // 커스텀 핀 아이콘으로 변경
             mMap.addMarker(mo);
+
+            /*
+            LocationData로 바꾸기 이전 코드
             if(pl.getCost_Basic().equals("0")) {
                 tv_marker.setText("무료");
             }
@@ -440,6 +468,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             else {
                 tv_marker.setText("기본 요금\n" + pl.getCost_Basic() + "원");
             }
+            */
         }
     }
 
@@ -556,11 +585,55 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 Double.parseDouble(pl.getLongittude()))));
 
         // 상세정보 열기
-        openParkinglotDetailInfo(pl.getName_ParkingLot());
+        drawParkinglotDetailInfo(pl, false);
     }
 
-    // P_Name의 주차장 이름을 가진 주차장 상세정보 창 열기
-    private void openParkinglotDetailInfo(String P_Name){
+
+    // LocationData의 이름을 가지고 MapActivity의 내장된 LocationData 리스트에서 해당되는 LocationData 찾아 마커 그리기
+    private void openParkingLotDetailWindow(String LocationDataName){
+        for(LocationData ld : List_Locationlist){
+            if(ld.Name.equals(LocationDataName)){
+                nowLocationData = ld;
+                openParkingLotDetailWindow(nowLocationData);
+                return;
+            }
+        }
+        Log.e("MapActivity", "openParkingLotDetailWindow 에서 이름을 가지고 일치하는 데이터를 찾는 데 실패하였습니다.");
+        Log.e("MapActivity", "LocationDataName : " + LocationDataName);
+    }
+
+    private void openParkingLotDetailWindow(LocationData inputLD){
+
+        // 널 예외처리
+        if(inputLD == null){
+            Log.e("MapActivity", "openParkingLotDetailWindow 에서 null 발생");
+            Log.e("MapActivity", "매개변수 : " + inputLD);
+            return;
+        }
+
+        // 인덱스가 음수일 경우 -> 마지막 데이터를 가리키도록 함
+        if(nowIndex < 0){
+            nowIndex = nowLocationData.List_Parkinglot.size();
+        }
+        // 인덱스가 현재 LocationData의 주차장 데이터 갯수보다 클 경우 -> 첫 번째 데이터를 가리키도록 함
+        if(nowLocationData.List_Parkinglot.size() -1 < nowIndex){
+            nowIndex = 0;
+        }
+
+        // 주차장 갯수에 따라 이전, 다음 버튼 생성 여부 변경
+        // 1개이면 없음
+        if(nowLocationData.List_Parkinglot.size() == 1){
+            drawParkinglotDetailInfo(nowLocationData.List_Parkinglot.get(nowIndex), false);
+        }
+        // 여러개면 있음
+        else{
+            drawParkinglotDetailInfo(nowLocationData.List_Parkinglot.get(nowIndex), true);
+        }
+    }
+
+
+    // ParkingLotData 객체의 주차장 이름을 가진 주차장 상세정보 창 열기
+    private void drawParkinglotDetailInfo(ParkingLot pl, boolean isenableswipe){
 
         final Animation translateUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_up);
         final Animation translateDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_down);
@@ -583,21 +656,56 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         final Button closebutton = findViewById(R.id.tableclose);
 
+        // 이전, 다음으로 넘기기 버튼들
+        final Button PrevBtn = findViewById(R.id.button_Previous);
+        final Button NextBtn = findViewById(R.id.button_Next);
 
-        // 마커의 이름(주차장 이름)을 가져오고
-        // 주차장 객체 하나 만들고
-        ParkingLot pl = null;
-        // 무식하게 for문돌려서 리스트에서 주차장 이름으로 주차장 객체를 찾는다.
-        for(ParkingLot t : DataManager.List_ParkingLot){
-            int tmp = 0;
-            tmp ++;
-            if(t.getName_ParkingLot().equals(P_Name)){
-                pl = t;
-                if(pl.getLongittude().equals(pl.getLongittude()))
-                break;
-            }
+        // 이전, 다음 버튼 관련 코드
+        if(isenableswipe){
+            PrevBtn.setEnabled(true);
+            NextBtn.setEnabled(true);
+
+            PrevBtn.setVisibility(View.VISIBLE);
+            NextBtn.setVisibility(View.VISIBLE);
+
+            PrevBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    nowIndex --;
+                    openParkingLotDetailWindow(nowLocationData);
+                }
+            });
+
+            NextBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    nowIndex ++;
+                    openParkingLotDetailWindow(nowLocationData);
+                }
+            });
+
         }
-        // 정보 넣기, 예외설정 필요
+        else{
+            PrevBtn.setEnabled(false);
+            NextBtn.setEnabled(false);
+
+            PrevBtn.setVisibility(View.GONE);
+            NextBtn.setVisibility(View.GONE);
+
+            PrevBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // 아무것도
+                }
+            });
+
+            NextBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // 하지마
+                }
+            });
+        }
 
         ////////임시로 만듬/////////
         String operate_days = pl.getOperate_Days();
@@ -676,7 +784,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {   //주차장 디테일 버튼 close 클릭시
                 // TODO : 길찾기 아이콘(주차장 상세 정보 열리면 즐겨찾기 별 옆에 있는 하얀 동그라미에 검은색 P) onClick 이벤트 만들기
-                // 카카오 내비 연결했는데, 오류코드없이 실행화면에서 넘어가지 않음. 원인을 모르겠음. 아시는 분?
+                // TODO : 카카오 내비 연결했는데, 오류코드없이 실행화면에서 넘어가지 않음. 원인을 모르겠음. 아시는 분?
                 String latitude = finalPl.getLatitude();
                 String longittude = finalPl.getLongittude();
                 String goal = finalPl.getName_ParkingLot();
@@ -711,7 +819,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 }
 
-// 리사이클러뷰 어뎁터
+// 즐겨찾기 목록을 위한 리사이클러뷰 어뎁터
 // 코드참고 : https://recipes4dev.tistory.com/154
 class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.ViewHolder> {
 
