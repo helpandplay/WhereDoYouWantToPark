@@ -73,7 +73,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     SearchView searchview;
     View option_drawerView, option_drawerlayout, favorite_drawerView, favorite_drawerlayout, search_layout, parkinglot_layout, parkinglot_base;
     ImageButton option_open, option_close, favorite_open, location, zoomin, zoomout;
-    Button favorite_close, parkinglot_detail_left, parkinglot_detail_right;
+    Button favorite_close;
     RecyclerView Favorite_RecyclerView;
 
     Marker selectedMarker;
@@ -307,6 +307,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 zoomin.setVisibility(View.VISIBLE);
                 zoomout.setVisibility(View.VISIBLE);
                 favorite_drawerView.startAnimation(translateRight);
+            }
+        });
+        parkinglot_layout.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if(parkinglot_layout.getVisibility() == View.VISIBLE) {
+                    parkinglot_layout.setVisibility(View.GONE);
+                    parkinglot_layout.startAnimation(translateDown);
+                }
             }
         });
         // gps버튼 클릭시 내 위치로 부드럽게 이동

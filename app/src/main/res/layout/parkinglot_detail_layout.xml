@@ -98,7 +98,6 @@
         android:background="@drawable/toleft"/>
 
     <RelativeLayout
-        android:id="@+id/parkinglot_layout_image_base"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
