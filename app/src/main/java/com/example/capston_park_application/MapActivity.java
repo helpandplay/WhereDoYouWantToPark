@@ -629,19 +629,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             nowIndex = 0;
         }
 
-        // 주차장 갯수에 따라 이전, 다음 버튼 생성 여부 변경
-        // 1개이면 없음
+        // 주차장 갯수에 따라 스와이프 기능(이전, 다음 버튼 생성 및 이벤트) 설정
+        // 주차장이 1개면 설정안함
         if(nowLocationData.List_Parkinglot.size() == 1){
             drawParkinglotDetailInfo(nowLocationData.List_Parkinglot.get(nowIndex), false);
         }
-        // 여러개면 있음
+        // 2개 이상이면 설정함
         else{
             drawParkinglotDetailInfo(nowLocationData.List_Parkinglot.get(nowIndex), true);
         }
     }
 
 
-    // ParkingLotData 객체의 주차장 이름을 가진 주차장 상세정보 창 열기
+    // ParkingLotData 객체를 가지고 상세정보 창 열기
     private void drawParkinglotDetailInfo(ParkingLot pl, boolean isenableswipe){
 
         final Animation translateUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_up);
@@ -670,6 +670,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         final Button NextBtn = findViewById(R.id.button_Next);
 
         // 이전, 다음 버튼 관련 코드
+        // 스와이프 활성화 상태라면
+        // nowIndex와 nowLocationData를 참조하여 다른 주차장 상세정보 창을 여는 이벤트를 넣는다
         if(isenableswipe){
             PrevBtn.setEnabled(true);
             NextBtn.setEnabled(true);
@@ -694,6 +696,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             });
 
         }
+        // 스와이프 비활성화 상태라면 버튼 가리고, 기능 없앤다
         else{
             PrevBtn.setEnabled(false);
             NextBtn.setEnabled(false);
