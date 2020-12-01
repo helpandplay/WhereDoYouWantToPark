@@ -77,8 +77,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     RecyclerView Favorite_RecyclerView;
 
     Marker selectedMarker;
-    View marker_root_view;
-    TextView tv_marker;
+    View marker_root_view, marker_root_view2;
+    TextView tv_marker, tv_marker2;
 
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
@@ -410,7 +410,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
     private void setCustomMarkerView() {
         marker_root_view = LayoutInflater.from(this).inflate(R.layout.marker_layout, null);
+        marker_root_view2 = LayoutInflater.from(this).inflate(R.layout.marker_layout2, null);
         tv_marker = marker_root_view.findViewById(R.id.tv_marker);
+        tv_marker2 = marker_root_view2.findViewById(R.id.tv_marker2);
     }
 
     // 마커 클릭 이벤트 추가
@@ -439,32 +441,76 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void MarkerGenerator(ArrayList<ParkingLot> list){
 
         this.List_Locationlist = LocationData.getLocationDataList(list);
-
-
+        /*TextView parkinglot_sequence = findViewById(R.id.sequence);
+        String tmpstring = null;*/
         for(LocationData ld : List_Locationlist){
-
             if(ld.List_Parkinglot.size() > 1){
-                String txt = "다중\n";
+                String txt = "다중 주차장";
+                String tmp = null;
+                String tmp2 = null;
+                String tmp3 = null;
+                String tmp4;
+                String tmp5 = null;
+                int i = 0;
                 for(ParkingLot pl : ld.List_Parkinglot){
-                    txt += pl.getName_ParkingLot() + "\n";
+                    i++;
+                    if(pl.getCost_Basic().equals("0")){
+                        //tmp = " " + i + "곳";
+                        tmp2 = "무료 ~";
+                    }
+                    else{
+                        tmp5 = pl.getCost_Basic();
+                        tmp4 = tmp3;
+                        tmp3 = pl.getCost_Basic();
+                        if(tmp4 != null){
+                            if(Integer.parseInt(tmp4) < Integer.parseInt(tmp3)){
+                                tmp5 = tmp4;
+                            }
+                            else if(Integer.parseInt(tmp4) == Integer.parseInt(tmp3)){
+                                tmp5 = pl.getCost_Basic();
+                            }
+                            else if(Integer.parseInt(tmp4) > Integer.parseInt(tmp3)){
+                                tmp5 = tmp3;
+                            }
+                            else{
+                                tmp5 = "오류";
+                            }
+                        }
+                        tmp2 = tmp5 + "원 ~";
+                        //tv_marker.setText(txt + "\n" + pl.getCost_Basic() + "원");
+                    }
+                    tmp = " " + i + "곳";
                 }
-                tv_marker.setText(txt);
+                tv_marker2.setText(tmp2);
+
+                MarkerOptions mo = new MarkerOptions();
+                mo.position(new LatLng(
+                        Double.parseDouble(ld.getLatitude()),
+                        Double.parseDouble(ld.getLongittude()))).
+                        title(ld.Name);
+                mo.icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(this, marker_root_view2))); // 다중 커스텀 핀 아이콘으로 변경
+                mMap.addMarker(mo);
             }
             else{
-                String txt = "단일\n";
+                String txt = "단일 주차장\n";
                 for(ParkingLot pl : ld.List_Parkinglot){
-                    txt += pl.getName_ParkingLot() + "\n";
+                    if(pl.getCost_Basic().equals("0")){
+                        tv_marker.setText("무료");
+                    }
+                    else{
+                        //txt += pl.getCost_Basic();
+                        tv_marker.setText(pl.getCost_Basic() + "원");
+                    }
+                    //txt += pl.getName_ParkingLot() = "\n";
+                    MarkerOptions mo = new MarkerOptions();
+                    mo.position(new LatLng(
+                            Double.parseDouble(ld.getLatitude()),
+                            Double.parseDouble(ld.getLongittude()))).
+                            title(ld.Name);
+                    mo.icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(this, marker_root_view))); // 단일 커스텀 핀 아이콘으로 변경
+                    mMap.addMarker(mo);
                 }
-                tv_marker.setText(txt);
             }
-
-            MarkerOptions mo = new MarkerOptions();
-            mo.position(new LatLng(
-                    Double.parseDouble(ld.getLatitude()),
-                    Double.parseDouble(ld.getLongittude()))).
-                    title(ld.Name);
-            mo.icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(this, marker_root_view))); // 커스텀 핀 아이콘으로 변경
-            mMap.addMarker(mo);
 
             /*
             LocationData로 바꾸기 이전 코드
@@ -629,19 +675,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             nowIndex = 0;
         }
 
-        // 주차장 갯수에 따라 스와이프 기능(이전, 다음 버튼 생성 및 이벤트) 설정
-        // 주차장이 1개면 설정안함
+        // 주차장 갯수에 따라 이전, 다음 버튼 생성 여부 변경
+        // 1개이면 없음
         if(nowLocationData.List_Parkinglot.size() == 1){
             drawParkinglotDetailInfo(nowLocationData.List_Parkinglot.get(nowIndex), false);
         }
-        // 2개 이상이면 설정함
+        // 여러개면 있음
         else{
             drawParkinglotDetailInfo(nowLocationData.List_Parkinglot.get(nowIndex), true);
         }
     }
 
 
-    // ParkingLotData 객체를 가지고 상세정보 창 열기
+    // ParkingLotData 객체의 주차장 이름을 가진 주차장 상세정보 창 열기
     private void drawParkinglotDetailInfo(ParkingLot pl, boolean isenableswipe){
 
         final Animation translateUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_up);
@@ -659,6 +705,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         final TextView parkinglot_sat_time_close = findViewById(R.id.parkinglot_sat_time_close);
         final TextView parkinglot_weekend_time = findViewById(R.id.parkinglot_weekend_time);
         final TextView parkinglot_weekend_time_close = findViewById(R.id.parkinglot_weekend_time_close);
+        final TextView sequence = findViewById(R.id.sequence);
         final TextView parkinglot_capacity = findViewById(R.id.parkinglot_capacity);
         final ImageView parkinglot_favoriteimage = findViewById(R.id.parkignlot_favorite_button);
         final ImageButton parkinglot_P_Button = findViewById(R.id.goto_kakaomap);
@@ -670,8 +717,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         final Button NextBtn = findViewById(R.id.button_Next);
 
         // 이전, 다음 버튼 관련 코드
-        // 스와이프 활성화 상태라면
-        // nowIndex와 nowLocationData를 참조하여 다른 주차장 상세정보 창을 여는 이벤트를 넣는다
         if(isenableswipe){
             PrevBtn.setEnabled(true);
             NextBtn.setEnabled(true);
@@ -696,7 +741,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             });
 
         }
-        // 스와이프 비활성화 상태라면 버튼 가리고, 기능 없앤다
         else{
             PrevBtn.setEnabled(false);
             NextBtn.setEnabled(false);
