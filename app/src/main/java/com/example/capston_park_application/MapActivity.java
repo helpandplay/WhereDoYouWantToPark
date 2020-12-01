@@ -270,6 +270,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             // DB 업데이트
                             DataManager.UpdateSearchScope(ViewDistance);
                             // 현재 화면 중심 기준으로 마커 다시 그리기
+                            // TODO : 갱신이 안되는 버그가 있음 해결 필요??
                             LatLng mPosition = mMap.getCameraPosition().target;
                             MarkerGenerator(DataManager.getParkinglotInRange(mPosition, ViewDistance));
                         }
