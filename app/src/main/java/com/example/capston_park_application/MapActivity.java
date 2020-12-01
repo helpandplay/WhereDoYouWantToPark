@@ -787,18 +787,30 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             if(TextUtils.isEmpty(pl.getTime_Close_Weekly())){
                 parkinglot_weekly_time_close.setText("~");
             }
+        } else{
+            parkinglot_weekly.setText("평일");
+            parkinglot_weekly_time.setText("영업하지 않음");
+            parkinglot_weekly_time_close.setText("");
         }
 
         if(operate_days.contains("토요일")){
             parkinglot_sat.setText("토요일");
             parkinglot_sat_time.setText(pl.getTime_Open_Sat());
             parkinglot_sat_time_close.setText("~  " + pl.getTime_Close_Sat());
+        } else{
+            parkinglot_sat.setText("토요일");
+            parkinglot_sat_time.setText("영업하지 않음");
+            parkinglot_sat_time_close.setText("");
         }
 
         if(operate_days.contains("공휴일")){
             parkinglot_weekend.setText("공휴일");
             parkinglot_weekend_time.setText(pl.getTime_Open_Weekend());
             parkinglot_weekend_time_close.setText("~  " + pl.getTime_Close_Weekend());
+        } else{
+            parkinglot_weekend.setText("공휴일");
+            parkinglot_weekend_time.setText("영업하지 않음");
+            parkinglot_weekend_time_close.setText("");
         }
 
         parkinglot_name.setText(pl.getName_ParkingLot());
