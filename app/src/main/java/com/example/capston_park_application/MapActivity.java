@@ -649,7 +649,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 Double.parseDouble(pl.getLongittude()))));
 
         // 상세정보 열기
-        drawParkinglotDetailInfo(pl, false);
+        drawParkinglotDetailInfo(pl, false, -1);
     }
 
 
@@ -677,7 +677,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         // 인덱스가 음수일 경우 -> 마지막 데이터를 가리키도록 함
         if(nowIndex < 0){
-            nowIndex = nowLocationData.List_Parkinglot.size();
+            nowIndex = nowLocationData.List_Parkinglot.size()  -1;
         }
         // 인덱스가 현재 LocationData의 주차장 데이터 갯수보다 클 경우 -> 첫 번째 데이터를 가리키도록 함
         if(nowLocationData.List_Parkinglot.size() -1 < nowIndex){
@@ -687,17 +687,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // 주차장 갯수에 따라 이전, 다음 버튼 생성 여부 변경
         // 1개이면 없음
         if(nowLocationData.List_Parkinglot.size() == 1){
-            drawParkinglotDetailInfo(nowLocationData.List_Parkinglot.get(nowIndex), false);
+            drawParkinglotDetailInfo(nowLocationData.List_Parkinglot.get(nowIndex), false, -1);
         }
         // 여러개면 있음
         else{
-            drawParkinglotDetailInfo(nowLocationData.List_Parkinglot.get(nowIndex), true);
+            drawParkinglotDetailInfo(nowLocationData.List_Parkinglot.get(nowIndex), true, nowLocationData.List_Parkinglot.size());
         }
     }
 
 
     // ParkingLotData 객체의 주차장 이름을 가진 주차장 상세정보 창 열기
-    private void drawParkinglotDetailInfo(ParkingLot pl, boolean isenableswipe){
+    private void drawParkinglotDetailInfo(ParkingLot pl, boolean isenableswipe, int ListSize){
 
         final Animation translateUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_up);
         final Animation translateDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_down);
@@ -725,13 +725,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         final Button PrevBtn = findViewById(R.id.button_Previous);
         final Button NextBtn = findViewById(R.id.button_Next);
 
-        // 이전, 다음 버튼 관련 코드
+        // 이전, 다음 버튼 관련 코드(선택한 핀에 여러개의 주차장이 있는지에 따른 변경점)
         if(isenableswipe){
             PrevBtn.setEnabled(true);
             NextBtn.setEnabled(true);
+            sequence.setText(ListSize + "개 주차장 중 " + (nowIndex + 1) + "번 주차장(" + (nowIndex + 1) + "/" + ListSize + ")");
+            sequence.setEnabled(false);
 
             PrevBtn.setVisibility(View.VISIBLE);
             NextBtn.setVisibility(View.VISIBLE);
+            sequence.setVisibility(View.VISIBLE);
 
             PrevBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -753,9 +756,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         else{
             PrevBtn.setEnabled(false);
             NextBtn.setEnabled(false);
+            sequence.setText("");
+            sequence.setEnabled(false);
 
             PrevBtn.setVisibility(View.GONE);
             NextBtn.setVisibility(View.GONE);
+            sequence.setVisibility(View.GONE);
 
             PrevBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -848,8 +854,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         parkinglot_P_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {   //주차장 디테일 버튼 close 클릭시
-                // TODO : 길찾기 아이콘(주차장 상세 정보 열리면 즐겨찾기 별 옆에 있는 하얀 동그라미에 검은색 P) onClick 이벤트 만들기
-                // TODO : 카카오 내비 연결했는데, 오류코드없이 실행화면에서 넘어가지 않음. 원인을 모르겠음. 아시는 분?
                 String latitude = finalPl.getLatitude();
                 String longittude = finalPl.getLongittude();
                 String goal = finalPl.getName_ParkingLot();
