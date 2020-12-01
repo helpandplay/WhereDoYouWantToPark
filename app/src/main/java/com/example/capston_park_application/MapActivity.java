@@ -174,6 +174,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 searchview.clearFocus();
             }
         });
+
+        /*parkinglot_layout.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if(parkinglot_layout.getVisibility() == View.VISIBLE) {
+                    parkinglot_layout.setVisibility(View.GONE);
+                    parkinglot_layout.startAnimation(translateDown);
+                }
+            }
+        });*/
         //카메라 줌인 줌아웃//
         zoomin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -422,16 +432,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // mMap.addMarker(new MarkerOptions().position(latLng).title("한남대"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(16));
-
         // gps 버튼을 이용해 내 위치로 이동
         // 예외 처리 되있으므로, 위치정보를 받지 못할 시 한남대에 그대로 있음.
         ImageButton myLocation = (ImageButton)findViewById(R.id.mylocation);
-        myLocation.performClick();
-
         ///////////////////마커 클릭시 이벤트처리///////////////////
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                searchview.setQuery("", false);
+                searchview.clearFocus();
                 openParkingLotDetailWindow(marker.getTitle());
                 return false;
             }
