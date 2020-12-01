@@ -250,7 +250,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         else{
                             ViewDistance += 200;
                             tv.setText(ViewDistance + "m");
+                            // DB 업데이트
                             DataManager.UpdateSearchScope(ViewDistance);
+                            // 현재 화면 중심 기준으로 마커 다시 그리기
                             LatLng mPosition = mMap.getCameraPosition().target;
                             MarkerGenerator(DataManager.getParkinglotInRange(mPosition, ViewDistance));
                         }
@@ -261,13 +263,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     public void onClick(View v){
                         if(ViewDistance <= 200){
                             Toast.makeText(MapActivity.this, "더 이상 거리를 줄일 수 없습니다.", Toast.LENGTH_SHORT).show();
-                            LatLng mPosition = mMap.getCameraPosition().target;
-                            MarkerGenerator(DataManager.getParkinglotInRange(mPosition, ViewDistance));
                         }
                         else{
                             ViewDistance -= 200;
                             tv.setText(ViewDistance + "m");
+                            // DB 업데이트
                             DataManager.UpdateSearchScope(ViewDistance);
+                            // 현재 화면 중심 기준으로 마커 다시 그리기
+                            LatLng mPosition = mMap.getCameraPosition().target;
+                            MarkerGenerator(DataManager.getParkinglotInRange(mPosition, ViewDistance));
                         }
                     }});
             }
